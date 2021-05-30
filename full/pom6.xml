@@ -5,14 +5,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>dev.galasa</groupId>
-		<artifactId>galasa-parent</artifactId>
-		<version>0.15.0</version>
-	</parent>
-
 	<groupId>dev.galasa</groupId>
-	<artifactId>galasa-isolated-full-maven-repo4</artifactId>
+	<artifactId>galasa-isolated-full-maven-repo6</artifactId>
 	<version>0.16.0</version>
 	<packaging>pom</packaging>
 
@@ -22,23 +16,16 @@
 
 	<dependencies>
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.11</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-parent</artifactId>
-            <version>42</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache</groupId>
-            <artifactId>apache</artifactId>
-            <version>18</version>
-            <type>pom</type>
-        </dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-parent</artifactId>
+			<version>1.7.25</version>
+			<type>pom</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -51,7 +38,7 @@
 				<executions>
 					<execution>
 						<id>x</id>
-						<phase>process-resources</phase>
+						<phase>process-sources</phase>
 						<goals>
 							<goal>deployartifacts2</goal>
 						</goals>

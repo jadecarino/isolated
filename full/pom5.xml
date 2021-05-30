@@ -5,14 +5,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>dev.galasa</groupId>
-		<artifactId>galasa-parent</artifactId>
-		<version>0.15.0</version>
-	</parent>
-
 	<groupId>dev.galasa</groupId>
-	<artifactId>galasa-isolated-full-maven-repo8</artifactId>
+	<artifactId>galasa-isolated-full-maven-repo5</artifactId>
 	<version>0.16.0</version>
 	<packaging>pom</packaging>
 
@@ -21,16 +15,35 @@
 	</properties>
 
 	<dependencies>
-		<!-- Extensions -->
-		<dependency>
-			<groupId>dev.galasa</groupId>
-			<artifactId>dev.galasa.cps.etcd</artifactId>
-			<version>0.15.0</version>
+        <dependency>
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.bnd.gradle</artifactId>
+			<version>5.3.0</version>
 		</dependency>
 		<dependency>
-			<groupId>dev.galasa</groupId>
-			<artifactId>dev.galasa.ras.couchdb</artifactId>
-			<version>0.15.0</version>
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.bnd.embedded-repo</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.bndlib</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.repository</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>biz.aQute.bnd</groupId>
+			<artifactId>biz.aQute.resolve</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>biz.aQute.bnd.builder</groupId>
+			<artifactId>biz.aQute.bnd.builder.gradle.plugin</artifactId>
+			<version>5.3.0</version>
 		</dependency>
 	</dependencies>
 
@@ -44,7 +57,7 @@
 				<executions>
 					<execution>
 						<id>x</id>
-						<phase>process-resources</phase>
+						<phase>process-sources</phase>
 						<goals>
 							<goal>deployartifacts2</goal>
 						</goals>
