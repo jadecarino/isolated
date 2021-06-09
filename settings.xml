@@ -23,6 +23,14 @@
                     <url>${galasa.eclipse.repo}</url>
                 </repository>
                 <repository>
+                    <id>galasa.javadoc.repo</id>
+                    <url>${galasa.javadoc.repo}</url>
+                </repository>
+                <repository>
+                    <id>galasa.docs.repo</id>
+                    <url>${galasa.docs.repo}</url>
+                </repository>
+                <repository>
                     <id>central</id>
                     <url>${galasa.central.repo}</url>
                 </repository>
