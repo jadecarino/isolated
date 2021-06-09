@@ -7,7 +7,7 @@
 
 	<groupId>dev.galasa</groupId>
 	<artifactId>galasa-isolated-mvp-maven-repo</artifactId>
-	<version>0.16.0</version>
+	<version>{{.Release}}</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -15,12 +15,19 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>dev.galasa</groupId>
-			<artifactId>dev.galasa.uber.obr</artifactId>
-			<version>0.16.0</version>
-			<type>obr</type>
-		</dependency>
+        <dependency>
+            <groupId>dev.galasa</groupId>
+            <artifactId>dev.galasa.uber.obr</artifactId>
+            <version>{{.Release}}</version>
+            <type>obr</type>
+        </dependency>
+        
+        <dependency>
+            <groupId>dev.galasa</groupId>
+            <artifactId>galasa-bom</artifactId>
+            <version>{{.Release}}</version>
+            <type>pom</type>
+        </dependency>
 
         <dependency>
             <groupId>dev.galasa</groupId>
