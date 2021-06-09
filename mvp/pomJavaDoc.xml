@@ -12,7 +12,7 @@
 
 	<dependencies>
         <dependency>
-            <groupId>org.apache.derby</groupId>
+            <groupId>dev.galasa</groupId>
             <artifactId>galasa-uber-javadoc</artifactId>
             <version>0.16.0</version>
             <type>zip</type>
