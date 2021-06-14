@@ -5,12 +5,15 @@ Overview
 ------------                                                                                                                                     
                                                                                                               
 Start using Galasa to enable deep integration testing across platforms and technologies, and run 
-repeatable, reliable, agile testing at scale across your enterprise.   
+repeatable, reliable, agile testing at scale across your enterprise.  
+
+This zip enables a network-free installation Galasa, removing the requirement to connect to the 
+internet when building or running tests.
 
 This zip file contains:                                                                                                                             
     - An eclipse directory containing the Galasa plug-in                                                                                                
     - A maven directory containing dependencies that are required for building Galasa tests                                                             
-    - A javadoc directory containing Javadoc API documentation for the Galasa Managers                                                                                                                              
+    - A javadoc directory containing javadoc API documentation for the Galasa Managers                                                                                                                              
     - An isolated.tar file - an optional Docker image that hosts the Eclipse and Maven directories. Use this file to host Galasa                        
     on an internal server that can be accessed by other users.                                                                                          
     - A docs.jar file that enables you to run the Galasa website locally on your machine                                                                
@@ -30,7 +33,8 @@ You can run the `docs.jar` file locally by using the standard java command with 
 Running the website on your local machine
 -------------------------------------------
 
-From a command line, run the following command in the directory into which you extracted the `docs.jar` file: 
+From a command line, run the following command in the directory in which you extracted the download 
+containing the `docs.jar` file: 
 
 `java -jar docs.jar`
 
@@ -51,7 +55,7 @@ Getting started
 --------------------                                                                                                                 
                                                                                                                                                    
 For information about installing the Galasa plug-in and getting started with using Galasa, go 
-to _Docs > Installing the Galasa plug-in_ documentation on the Galasa website.        
+to the "Docs > Installing the Galasa plug-in" documentation on the Galasa website.        
 
 Note: the locally run website currently links to the external Javadoc site. You can access the Javadoc 
 locally by using the Javadoc documentation that is contained in the Javadoc directory provided in this zip. 
@@ -66,6 +70,6 @@ https://www.ibm.com/docs/zvtp
                                                                                                                                                     
 *******************************************************************************     
 
-(C) Copyright IBM Corporation 2021 All rights reserved.                                                                                             
-    For legal information, see http://www.ibm.com/legal/copytrade.shtml                                                                             
+(c) Copyright IBM Corp. 2021.                                                                                        
+                                                                          
 *******************************************************************************                                                                     
