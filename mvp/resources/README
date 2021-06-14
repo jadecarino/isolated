@@ -1,13 +1,13 @@
-IBM Distribution for Galasa version 1.0                                                                                                                
-===============================================================================      
+IBM Distribution for Galasa version 1.0  
+===============================================================================    
 
-Overview                    
-------------                                                                                                                                     
+Overview       
+------------  
                                                                                                               
 Start using Galasa to enable deep integration testing across platforms and technologies, and run 
 repeatable, reliable, agile testing at scale across your enterprise.  
 
-This zip enables a network-free installation Galasa, removing the requirement to connect to the 
+This zip enables a network-free installation of Galasa, removing the requirement to connect to the 
 internet when building or running tests.
 
 This zip file contains:                                                                                                                             
