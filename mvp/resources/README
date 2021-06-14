@@ -1,4 +1,4 @@
-IBM Distribution for Galasa version 1.0 (20210618)                                                                                                                
+IBM Distribution for Galasa version 1.0                                                                                                                
 ===============================================================================      
 
 Overview                    
@@ -8,14 +8,14 @@ Start using Galasa to enable deep integration testing across platforms and techn
 repeatable, reliable, agile testing at scale across your enterprise.   
 
 This zip file contains:                                                                                                                             
-    - An Eclipse directory containing the Galasa plug-in                                                                                                
-    - A Maven directory containing dependencies that are required for building Galasa tests                                                             
-    - A Javadoc directory containing Javadoc API documentation for the Galasa Managers                                                                                                                              
+    - An eclipse directory containing the Galasa plug-in                                                                                                
+    - A maven directory containing dependencies that are required for building Galasa tests                                                             
+    - A javadoc directory containing Javadoc API documentation for the Galasa Managers                                                                                                                              
     - An isolated.tar file - an optional Docker image that hosts the Eclipse and Maven directories. Use this file to host Galasa                        
     on an internal server that can be accessed by other users.                                                                                          
     - A docs.jar file that enables you to run the Galasa website locally on your machine                                                                
-    - A Notices file                                                                                                                                    
-    - Various language files                                                                                                                            
+    - IBM Distribution for Galasa 1.0 Notices.html                               
+    - Software license files in different languages                                                                       
                                                                                                  
                                                                                                                                                     
 You can find out more about Galasa on the Galasa website https://galasa.dev, or you can host the website locally by 
