@@ -23,12 +23,6 @@ This zip file contains:
                                                                                                                                                     
 You can find out more about Galasa on the Galasa website https://galasa.dev, or you can host the website locally by 
 running the `docs.jar` file that is contained in this zip file on your machine or on an internal server.                                                                
-                                                                                                                                                 
-                                                                                                                                                    
-Running the Galasa website locally                                                                                                                    
------------------------------------                                                                                                                         
-                                     
-You can run the `docs.jar` file locally by using the standard java command with the -jar option. 
 
 Running the website on your local machine
 -------------------------------------------
@@ -55,17 +49,26 @@ Getting started
 --------------------                                                                                                                 
                                                                                                                                                    
 For information about installing the Galasa plug-in and getting started with using Galasa, go 
-to the "Docs > Installing the Galasa plug-in" documentation on the Galasa website.        
+to the "Docs > Getting started" documentation on the Galasa website. 
 
-Note: the locally run website currently links to the external Javadoc site. You can access the Javadoc 
+Note that the Galasa Ecosystem is not supported in IBM Distribution for Galasa version 1.0.
+
+The locally run website currently links to the external Javadoc site. You can access the Javadoc 
 locally by using the Javadoc documentation that is contained in the Javadoc directory provided in this zip. 
-                                                                                                                                                    
-                                                                                                                    
+
+
+Notes
+--------------------  
+
+You are responsible for any sensitive information that you put into any configuration files. 
+
 IBM Knowledge Centre
 -----------------------                                                                                                                                
                                                                                                                            
 For information about using IBM Z Virtual Test Platform and IBM Distribution for Galasa to automate your testing, see the IBM Z Virtual Test Platform documentation at:                      
-https://www.ibm.com/docs/zvtp                                                                                                                       
+https://www.ibm.com/docs/zvtp 
+                                                                                                                    
+                                                                                                                      
                                                                                                                                                     
                                                                                                                                                     
 *******************************************************************************     
