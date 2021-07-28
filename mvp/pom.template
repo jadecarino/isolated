@@ -172,7 +172,7 @@
                                 <artifactItem>
                                     <groupId>dev.galasa</groupId>
                                     <artifactId>dev.galasa.eclipse.site</artifactId>
-                                    <version>0.16.0</version>
+                                    <version>0.17.0</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/isolated/eclipse</outputDirectory>
