@@ -1,7 +1,5 @@
 #
-# Licensed Materials - Property of IBM
-# 
-# (c) Copyright IBM Corp. 2021.
+# Copyright contributors to the Galasa project 
 #
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -9,16 +7,12 @@ metadata:
   name: isolated-build
   namespace: galasa-tekton
 spec:
-  resources:
-    inputs:
-      - name: git-isolated
-        type: git
-      - name: git-obr
-        type: git
+  workspaces:
+  - name: git-workspace
+    optional: false
+    mountpath: /workspace/git
   params:
   - name: distBranch
-    type: string
-  - name: version
     type: string
   - name: mavenCentralRepo
     type: string
@@ -49,20 +43,26 @@ spec:
     default: ""
   steps:
   - name: generate-pom
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - galasabld 
     - template 
     - --releaseMetadata
-    - /workspace/git-obr/release.yaml 
+    - /workspace/git/framework/release.yaml 
+    - --releaseMetadata
+    - /workspace/git/extensions/release.yaml 
+    - --releaseMetadata
+    - /workspace/git/managers/release.yaml 
+    - --releaseMetadata
+    - /workspace/git/obr/release.yaml 
     - --template
     - pom.template 
     - --output
     - pom.xml 
     - --isolated
   - name: maven-build-isolated1
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -75,7 +75,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -83,7 +83,7 @@ spec:
     - pom.xml
     - process-sources
   - name: maven-build-isolated2
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -96,7 +96,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -104,7 +104,7 @@ spec:
     - pom2.xml
     - process-sources
   - name: maven-build-isolated3
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -117,7 +117,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -125,7 +125,7 @@ spec:
     - pom3.xml
     - process-sources
   - name: maven-build-isolated4
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -138,7 +138,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -146,7 +146,7 @@ spec:
     - pom4.xml
     - process-sources
   - name: maven-build-isolated5
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -159,7 +159,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -167,7 +167,7 @@ spec:
     - pom5.xml
     - process-sources
   - name: maven-build-isolated6
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -180,7 +180,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -188,7 +188,7 @@ spec:
     - pom6.xml
     - process-sources
   - name: maven-build-javadoc
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -201,7 +201,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -209,7 +209,7 @@ spec:
     - pomJavaDoc.xml
     - process-sources
   - name: maven-build-docs
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
@@ -222,7 +222,7 @@ spec:
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -230,14 +230,14 @@ spec:
     - pomDocs.xml
     - process-sources
   - name: copy-text-files
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     script: |
       #!/bin/sh
       set +e
       cp -vr resources/* target/isolated/
   - name: docker-build-isolated-image
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/library/kaniko-executor:latest
     env:
     - name: DOCKER_CONFIG
@@ -245,16 +245,16 @@ spec:
     command:
     - /kaniko/executor
     - --dockerfile=./Dockerfile
-    - --context=/workspace/git-isolated/full
+    - --context=/workspace/git/isolated/full
     - --destination=$(params.dockerRepo)/galasadev/galasa-isolated:$(params.distBranch)
-    - --oci-layout-path=/workspace/git-isolated/full/image-digest
+    - --oci-layout-path=/workspace/git/isolated/full/image-digest
     - --skip-tls-verify
     - --skip-tls-verify-pull
     - --single-snapshot
     - --verbosity=info
     - --build-arg=dockerRepository=$(params.dockerRepo)
   - name: docker-tar-isolated-image
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/library/kaniko-executor:latest
     env:
     - name: DOCKER_CONFIG
@@ -263,29 +263,29 @@ spec:
     - /kaniko/executor
     - --no-push
     - --tarPath
-    - /workspace/git-isolated/full/target/isolated/isolated.tar
+    - /workspace/git/isolated/full/target/isolated/isolated.tar
     - --dockerfile=./Dockerfile
-    - --context=/workspace/git-isolated/full
-    - --destination=galasadev/galasa-distribution:$(params.version)
-    - --oci-layout-path=/workspace/git-isolated/full/image-digest
+    - --context=/workspace/git/isolated/full
+    - --destination=galasadev/galasa-distribution:latest
+    - --oci-layout-path=/workspace/git/isolated/full/image-digest
     - --skip-tls-verify
     - --skip-tls-verify-pull
     - --single-snapshot
     - --verbosity=info
     - --build-arg=dockerRepository=$(params.dockerRepo)
   - name: maven-build-isolated-zip
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/galasa/galasa-build
     command:
     - mvn
     - -Dgpg.skip=true
-    - -Dgalasa.release.repo=file:/workspace/git-isolated/full/repo
+    - -Dgalasa.release.repo=file:/workspace/git/isolated/full/repo
     - -Dgalasa.runtime.repo=$(params.runtimeSourceRepo)
     - -Dgalasa.simplatform.repo=$(params.simplatformSourceRepo)
     - -Dgalasa.central.repo=$(params.mavenCentralRepo)
     - -Dgalasa.eclipse.repo=$(params.eclipseSourceRepo)
     - --settings
-    - /workspace/git-isolated/settings.xml
+    - /workspace/git/isolated/settings.xml
     - -B
     - -e
     - -fae
@@ -293,7 +293,7 @@ spec:
     - pomZip.xml
     - deploy
   - name: docker-build-isolated-maven-image
-    workingDir: /workspace/git-isolated/full
+    workingDir: /workspace/git/isolated/full
     image: $(params.dockerRepo)/library/kaniko-executor:latest
     env:
     - name: DOCKER_CONFIG
@@ -301,10 +301,10 @@ spec:
     command:
     - /kaniko/executor
     - --dockerfile=./DockerfileZip
-    - --context=/workspace/git-isolated/full
+    - --context=/workspace/git/isolated/full
     - --destination=$(params.dockerRepo)/galasadev/galasa-maven-isolated:$(params.distBranch)
     - $(params.noPush)
-    - --oci-layout-path=/workspace/git-isolated/full/image-maven-digest
+    - --oci-layout-path=/workspace/git/isolated/full/image-maven-digest
     - --skip-tls-verify
     - --skip-tls-verify-pull
     - --single-snapshot
