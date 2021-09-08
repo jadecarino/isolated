@@ -130,6 +130,10 @@ spec:
       name: recycle-deployment
     runAfter:
     - isolated-build
+    when:
+    - input: "$(params.noPush)"
+      operator: notin
+      values: ["--no-push"]
     params:
     - name: namespace
       value: galasa-development
@@ -169,6 +173,10 @@ spec:
       name: recycle-deployment
     runAfter:
     - mvp-build
+    when:
+    - input: "$(params.noPush)"
+      operator: notin
+      values: ["--no-push"]
     params:
     - name: namespace
       value: galasa-development
