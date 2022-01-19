@@ -17,13 +17,13 @@ spec:
   serviceAccountName: build-bot
   podTemplate:
     nodeSelector:
-      beta.kubernetes.io/arch: amd64
+      kubernetes.io/arch: amd64
       platform: hdc
   workspaces:
   - name: git-workspace
     volumeClaimTemplate:
       spec:
-        storageClassName: rbd
+        storageClassName: longhorn-temp
         accessModes:
           - ReadWriteOnce
         resources:
