@@ -27,7 +27,7 @@
                                 <artifactItem>
                                     <groupId>dev.galasa</groupId>
                                     <artifactId>galasa-uber-javadoc</artifactId>
-                                    <version>0.22.0</version>
+                                    <version>0.23.0</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/isolated/javadoc</outputDirectory>
