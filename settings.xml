@@ -47,5 +47,12 @@
             </pluginRepositories>
         </profile>
 	</profiles>
+    <servers>
+        <server>
+            <id>galasa.docs.repo</id>
+            <username>${github.token.read.packages.username}</username>
+            <password>${github.token.read.packages.password}</password>
+        </server>
+    </servers>
 
 </settings>
