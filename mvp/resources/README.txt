@@ -13,7 +13,8 @@ internet when building or running tests.
 This zip file contains:                                                                                                                             
     - An eclipse directory containing the Galasa plug-in                                                                                                
     - A maven directory containing dependencies that are required for building Galasa tests                                                             
-    - A javadoc directory containing javadoc API documentation for the Galasa Managers                                                                                                                              
+    - A javadoc directory containing javadoc API documentation for the Galasa Managers   
+    - A galasactl directory containing the binaries of the Galasa CLI                                                                                                            
     - An isolated.tar file - an optional Docker image that hosts the Eclipse and Maven directories. Use this file to host Galasa                        
     on an internal server that can be accessed by other users.                                                                                          
     - A docs.jar file that enables you to run the Galasa website locally on your machine                                                                
