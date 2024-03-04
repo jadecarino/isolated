@@ -19,10 +19,6 @@
                     <url>${galasa.simplatform.repo}</url>
                 </repository>
                 <repository>
-                    <id>galasa.eclipse.repo</id>
-                    <url>${galasa.eclipse.repo}</url>
-                </repository>
-                <repository>
                     <id>galasa.javadoc.repo</id>
                     <url>${galasa.javadoc.repo}</url>
                 </repository>
