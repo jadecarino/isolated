@@ -7,12 +7,11 @@ repeatable, reliable, agile testing at scale across your enterprise.
 This zip enables a network-free installation of Galasa, removing the requirement to connect to the 
 internet when building or running tests.
 
-This zip file contains:                                                                                                                             
-    - An eclipse directory containing the Galasa plug-in.                                                                                             
+This zip file contains:                                                                                                                                                                                                                        
     - A maven directory containing dependencies that are required for building Galasa tests.
     - A javadoc directory containing javadoc API documentation for the Galasa Managers.
     - A galasactl directory containing the binaries of the Galasa CLI.
-    - An isolated.tar file - an optional Docker image that hosts the Eclipse and Maven directories. Use this file to host Galasa                        
+    - An isolated.tar file - an optional Docker image that hosts the Maven directories. Use this file to host Galasa                        
     on an internal server that can be accessed by other users.
     - A docs.jar file that enables you to run the Galasa website locally on your machine.
                                                                                                  
@@ -44,8 +43,8 @@ rather than localhost. For example:
 Getting started 
 --------------------                                                                                                                 
                                                                                                                                                    
-For information about installing the Galasa plug-in, using the Galasa CLI and getting started with using Galasa, go 
-to the "Docs > Getting started using Eclipse" or "Docs > Getting started using the Galasa CLI" documentation on the Galasa website. 
+For information about installing and using the Galasa CLI and getting started with using Galasa, go 
+to the "Docs > Getting started using the Galasa CLI" documentation on the Galasa website. 
 
 The locally run website currently links to the external Javadoc site. You can access the Javadoc 
 locally by using the Javadoc documentation that is contained in the Javadoc directory provided in this zip. 
