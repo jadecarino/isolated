@@ -55,12 +55,13 @@ note()      { printf "\n${underline}${bold}${blue}Note:${reset} ${blue}%s${reset
 # Functions
 #-----------------------------------------------------------------------------------------                   
 function usage {
-    info "Syntax: run-simplatform-server.sh [OPTIONS]"
+    info "Syntax: run-simplatform.sh [OPTIONS]"
     cat << EOF
 Options are:
 -h | --help : Display this help text
 --location  : (Required with --server) The path to the location of simplatform within the isolated package.
-              Can be an absolute path or a relative path.
+              Can be an absolute path (/Users/user/Downloads/isolated/maven/dev/galasa/) 
+              or a relative path (~/Downloads/isolated/maven/dev/galasa/).
 --server    : Launch the back-end server 3270 application. Ctrl-C to end it.
 --ui        : Launch the web user interface application which talks to the back-end server. Ctrl-C to end it.
 Environment Variables:
@@ -100,7 +101,7 @@ while [ "$1" != "" ]; do
 done
 
 if [[ "$package_location" == "" ]] && [[ "$is_server" == true ]] ; then
-    error "location is not set."
+    error "--location is not set."
     usage 
     exit 1
 fi
@@ -140,8 +141,8 @@ function run_server {
 function run_ui {
     h1 "Running Simbank web user interface application (version ${SIMBANK_VERSION}) ..."
     info "Use Ctrl-C to stop it.\n"
-    container_id=$(docker run --rm -p 8080:8080 -d galasa-simplatform-webapp)
-    info "Launch the Simbank web UI here: http://localhost:8080/galasa-simplatform-webapp/index.html"
+    container_id=$(docker run --rm -p 7080:8080 -d galasa-simplatform-webapp)
+    info "Launch the Simbank web UI here: http://localhost:7080/galasa-simplatform-webapp/index.html"
     docker attach ${container_id}
 }
 
@@ -150,7 +151,7 @@ function run_tests {
     
     cmd="galasactl runs submit local \
     --obr mvn:dev.galasa/dev.galasa.simbank.obr/${TEST_OBR_VERSION}/obr \
-    --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.SIMBANKIVT \
+    --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.SimBankIVT \
     --log ${BASEDIR}/temp/log.txt"
 
     info "Running this command: $cmd"
