@@ -59,7 +59,7 @@ function usage {
     cat << EOF
 Options are:
 -h | --help : Display this help text
---location  : (Required with --server) The path to the location of simplatform within the isolated package.
+--location  : (Required with --server) The path to the location of galasa-simplatform within the isolated package.
               Can be an absolute path (/Users/user/Downloads/isolated/maven/dev/galasa/) 
               or a relative path (~/Downloads/isolated/maven/dev/galasa/).
 --server    : Launch the back-end server 3270 application. Ctrl-C to end it.
