@@ -1,0 +1,548 @@
+name: Main build
+
+on:
+  push:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  NAMESPACE: galasa-dev
+  IMAGE_TAG: main
+  
+jobs:
+  build-isolated:
+    name: Build Isolated
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Framework
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/framework
+          path: framework
+
+      - name: Checkout Extensions
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/extensions
+          path: extensions
+      
+      - name: Checkout Managers
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/managers
+          path: managers
+
+      - name: Checkout OBR
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/obr
+          path: obr
+
+      - name: Checkout Isolated
+        uses: actions/checkout@v4
+        with:
+          path: isolated
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'semeru'
+          cache: maven
+      
+      - name:  Generate Isolated pom.xml
+        run: |
+          docker run --rm -v ${{github.workspace}}:/var/root/ ghcr.io/${{env.NAMESPACE}}/galasabld-amd64:${{env.IMAGE_TAG}} template --releaseMetadata var/root/framework/release.yaml --releaseMetadata /var/root/extensions/release.yaml --releaseMetadata /var/root/managers/release.yaml --releaseMetadata /var/root/obr/release.yaml --template /var/root/isolated/full/pom.template --output /var/root/isolated/full/pom.xml --isolated
+      
+      - name: Build Isolated pom.xml with maven
+        working-directory: ./isolated/full
+        env:
+          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
+          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pom.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
+          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build Isolated pom2.xml with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pom2.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build Isolated pom3.xml with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pom3.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build Isolated pom4.xml with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pom4.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build Isolated pom5.xml with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pom5.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build Isolated pom6.xml with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pom6.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build Isolated Javadoc with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pomJavaDoc.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build Isolated Docs with maven
+        working-directory: ./isolated/full
+        env:
+          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
+          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pomDocs.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
+          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Download galasactl binaries
+        working-directory: ./isolated/full
+        run: |
+          mkdir bin && 
+          cd bin && 
+          wget https://development.galasa.dev/main/binary/cli/galasactl-darwin-x86_64 &&
+          wget https://development.galasa.dev/main/binary/cli/galasactl-darwin-arm64 &&
+          wget https://development.galasa.dev/main/binary/cli/galasactl-linux-arm64 &&
+          wget https://development.galasa.dev/main/binary/cli/galasactl-linux-x86_64 &&
+          wget https://development.galasa.dev/main/binary/cli/galasactl-linux-s390x &&
+          wget https://development.galasa.dev/main/binary/cli/galasactl-windows-x86_64.exe &&
+          cd ..
+
+      - name: Build galasactl directory with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pomGalasactl.xml validate \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Copy text files into Isolated
+        working-directory: ./isolated/full
+        run : |
+          cp -vr resources/* target/isolated/
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Extract metadata for galasa-isolated image
+        id: metadata-galasa-isolated
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated
+  
+      - name: Build Docker image for Isolated development maven registry
+        id: build-galasa-isolated
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
+          push: true
+          tags: ${{ steps.metadata-galasa-isolated.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-isolated.outputs.labels }}
+          build-args: |
+            directory=isolated/full
+
+      - name: Extract metadata for galasa-isolated-tar image
+        id: metadata-galasa-isolated-tar
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated-tar
+
+      - name: Build Docker image for Isolated tar file
+        id: build-galasa-isolated-tar
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
+          push: true
+          tags: ${{ steps.metadata-galasa-isolated-tar.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-isolated-tar.outputs.labels }}
+          build-args: |
+            --tarPath
+            isolated/full/target/isolated/isolated.tar
+            directory=isolated/full
+
+      - name: Build Isolated zip with maven
+        working-directory: ./isolated/full
+        run: |
+          mvn -f ${{github.workspace}}/isolated/full/pomZip.xml deploy \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.release.repo=file:${{github.workspace}}/isolated/full/repo \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Extract metadata for galasa-isolated-zip image
+        id: metadata-galasa-isolated-zip
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated-zip
+
+      - name: Build Docker image for Isolated zip
+        id: build-galasa-isolated-zip
+        uses: docker/build-push-action@v5
+        with:
+          context: ./isolated/full
+          file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolatedzip
+          push: true
+          tags: ${{ steps.metadata-galasa-isolated-zip.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-isolated-zip.outputs.labels }}
+          build-args: |
+            baseVersion=latest
+            dockerRepository=ghcr.io
+
+  build-mvp:
+    name: Build MVP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Framework
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/framework
+          path: framework
+
+      - name: Checkout Extensions
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/extensions
+          path: extensions
+      
+      - name: Checkout Managers
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/managers
+          path: managers
+
+      - name: Checkout OBR
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.NAMESPACE}}/obr
+          path: obr
+
+      - name: Checkout Isolated
+        uses: actions/checkout@v4
+        with:
+          path: isolated
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'semeru'
+          cache: maven
+      
+      - name:  Generate MVP pom.xml
+        run: |
+          docker run --rm -v ${{github.workspace}}:/var/root/ ghcr.io/${{env.NAMESPACE}}/galasabld-amd64:${{env.IMAGE_TAG}} template --releaseMetadata var/root/framework/release.yaml --releaseMetadata /var/root/extensions/release.yaml --releaseMetadata /var/root/managers/release.yaml --releaseMetadata /var/root/obr/release.yaml --template /var/root/isolated/mvp/pom.template --output /var/root/isolated/mvp/pom.xml --mvp
+      
+      - name: Build MVP pom.xml with maven
+        working-directory: ./isolated/mvp
+        env:
+          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
+          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pom.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
+          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build MVP pom2.xml with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pom2.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build MVP pom3.xml with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pom3.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build MVP pom4.xml with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pom4.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build MVP pom5.xml with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pom5.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build MVP pom6.xml with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pom6.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build MVP Javadoc with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pomJavaDoc.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Build MVP Docs with maven
+        working-directory: ./isolated/mvp
+        env:
+          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
+          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pomDocs.xml process-sources \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
+          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Download galasactl binaries
+        working-directory: ./isolated/mvp
+        run: |
+          mkdir bin && 
+          cd bin && 
+          wget https://development.galasa.dev/gh/binary/cli/galasactl-darwin-x86_64 &&
+          wget https://development.galasa.dev/gh/binary/cli/galasactl-darwin-arm64 &&
+          wget https://development.galasa.dev/gh/binary/cli/galasactl-linux-arm64 &&
+          wget https://development.galasa.dev/gh/binary/cli/galasactl-linux-x86_64 &&
+          wget https://development.galasa.dev/gh/binary/cli/galasactl-linux-s390x &&
+          wget https://development.galasa.dev/gh/binary/cli/galasactl-windows-x86_64.exe &&
+          cd ..
+
+      - name: Build galasactl directory with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pomGalasactl.xml validate \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Copy text files into MVP
+        working-directory: ./isolated/mvp
+        run : |
+          cp -vr resources/* target/isolated/
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for galasa-mvp image
+        id: metadata-galasa-mvp
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp
+  
+      - name: Build Docker image for MVP development maven registry
+        id: build-galasa-mvp
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
+          push: true
+          tags: ${{ steps.metadata-galasa-mvp.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-mvp.outputs.labels }}
+          build-args: |
+            directory=isolated/mvp
+
+      - name: Extract metadata for galasa-mvp-tar image
+        id: metadata-galasa-mvp-tar
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp-tar
+
+      - name: Build Docker image for MVP tar file
+        id: build-galasa-mvp-tar
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
+          push: true
+          tags: ${{ steps.metadata-galasa-mvp-tar.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-mvp-tar.outputs.labels }}
+          build-args: |
+            --tarPath
+            isolated/mvp/target/isolated/isolated.tar
+            directory=isolated/mvp
+
+      - name: Build MVP zip with maven
+        working-directory: ./isolated/mvp
+        run: |
+          mvn -f ${{github.workspace}}/isolated/mvp/pomZip.xml deploy \
+          -Dgalasa.target.repo=file:target/isolated/maven \
+          -Dgalasa.release.repo=file:${{github.workspace}}/isolated/mvp/repo \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
+          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
+          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
+          --batch-mode --errors --fail-at-end \
+          --settings ${{ github.workspace }}/isolated/settings.xml
+
+      - name: Extract metadata for galasa-mvp-zip image
+        id: metadata-galasa-mvp-zip
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp-zip
+  
+      - name: Build Docker image for MVP zip
+        id: build-galasa-mvp-zip
+        uses: docker/build-push-action@v5
+        with:
+          context: ./isolated/mvp
+          file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolatedzip
+          push: true
+          tags: ${{ steps.metadata-galasa-mvp-zip.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-mvp-zip.outputs.labels }}
+          build-args: |
+            baseVersion=latest
+            dockerRepository=ghcr.io
+      
