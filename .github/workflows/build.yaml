@@ -1,7 +1,7 @@
 name: Main build
 
 on:
-  pull_request:
+  push:
     branches: [main]
 
 env:
@@ -213,7 +213,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated
   
-      - name: Build galasa-isolated image
+      - name: Build Docker image for Isolated development maven registry
         id: build-galasa-isolated
         uses: docker/build-push-action@v5
         with:
@@ -231,7 +231,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-distribution-isolated
 
-      - name: Build galasa-distribution-isolated image
+      - name: Build Docker image for Isolated tar file
         id: build-galasa-distribution-isolated
         uses: docker/build-push-action@v5
         with:
@@ -265,7 +265,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated-zip
 
-      - name: Build galasa-isolated-zip image
+      - name: Build Docker image for Isolated zip
         id: build-galasa-isolated-zip
         uses: docker/build-push-action@v5
         with:
@@ -468,13 +468,20 @@ jobs:
         run : |
           cp -vr resources/* target/isolated/
 
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Extract metadata for galasa-mvp image
         id: metadata-galasa-mvp
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp
   
-      - name: Build galasa-mvp image
+      - name: Build Docker image for MVP development maven registry
         id: build-galasa-mvp
         uses: docker/build-push-action@v5
         with:
@@ -492,7 +499,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-distribution-mvp
 
-      - name: Build galasa-distribution-mvp image
+      - name: Build Docker image for MVP tar file
         id: build-galasa-distribution-mvp
         uses: docker/build-push-action@v5
         with:
@@ -526,7 +533,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp-zip
   
-      - name: Build galasa-mvp-zip image
+      - name: Build Docker image for MVP zip
         id: build-galasa-mvp-zip
         uses: docker/build-push-action@v5
         with:
