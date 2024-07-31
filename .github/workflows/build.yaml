@@ -225,21 +225,21 @@ jobs:
           build-args: |
             directory=isolated/full
 
-      - name: Extract metadata for galasa-distribution-isolated image
-        id: metadata-galasa-distribution-isolated
+      - name: Extract metadata for galasa-isolated-tar image
+        id: metadata-galasa-isolated-tar
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-distribution-isolated
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated-tar
 
       - name: Build Docker image for Isolated tar file
-        id: build-galasa-distribution-isolated
+        id: build-galasa-isolated-tar
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
           push: true
-          tags: ${{ steps.metadata-galasa-distribution-isolated.outputs.tags }}
-          labels: ${{ steps.metadata-galasa-distribution-isolated.outputs.labels }}
+          tags: ${{ steps.metadata-galasa-isolated-tar.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-isolated-tar.outputs.labels }}
           build-args: |
             --tarPath
             isolated/full/target/isolated/isolated.tar
@@ -493,21 +493,21 @@ jobs:
           build-args: |
             directory=isolated/mvp
 
-      - name: Extract metadata for galasa-distribution-mvp image
-        id: metadata-galasa-distribution-mvp
+      - name: Extract metadata for galasa-mvp-tar image
+        id: metadata-galasa-mvp-tar
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-distribution-mvp
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp-tar
 
       - name: Build Docker image for MVP tar file
-        id: build-galasa-distribution-mvp
+        id: build-galasa-mvp-tar
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
           push: true
-          tags: ${{ steps.metadata-galasa-distribution-mvp.outputs.tags }}
-          labels: ${{ steps.metadata-galasa-distribution-mvp.outputs.labels }}
+          tags: ${{ steps.metadata-galasa-mvp-tar.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-mvp-tar.outputs.labels }}
           build-args: |
             --tarPath
             isolated/mvp/target/isolated/isolated.tar

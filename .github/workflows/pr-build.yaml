@@ -225,7 +225,7 @@ jobs:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
           load: true
-          tags: galasa-distribution-isolated:test
+          tags: galasa-isolated-tar:test
           build-args: |
             --tarPath
             isolated/full/target/isolated/isolated.tar
@@ -472,7 +472,7 @@ jobs:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
           load: true
-          tags: galasa-distribution-mvp:test
+          tags: galasa-mvp-tar:test
           build-args: |
             --tarPath
             isolated/mvp/target/isolated/isolated.tar
