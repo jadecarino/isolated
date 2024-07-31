@@ -1,4 +1,4 @@
-name: PR build
+name: Main build
 
 on:
   pull_request:
@@ -62,7 +62,6 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pom.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -78,7 +77,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pom2.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -92,7 +90,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pom3.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -106,7 +103,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pom4.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -120,7 +116,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pom5.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -134,7 +129,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pom6.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -148,7 +142,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pomJavaDoc.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -165,7 +158,6 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pomDocs.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -194,7 +186,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pomGalasactl.xml validate \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -209,23 +200,46 @@ jobs:
         run : |
           cp -vr resources/* target/isolated/
 
-      - name: Build Docker image for Isolated development maven registry
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Extract metadata for galasa-isolated image
+        id: metadata-galasa-isolated
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated
+  
+      - name: Build galasa-isolated image
+        id: build-galasa-isolated
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-isolated:test
+          push: true
+          tags: ${{ steps.metadata-galasa-isolated.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-isolated.outputs.labels }}
           build-args: |
             directory=isolated/full
 
-      - name: Build Docker image for Isolated tar file
+      - name: Extract metadata for galasa-distribution-isolated image
+        id: metadata-galasa-distribution-isolated
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-distribution-isolated
+
+      - name: Build galasa-distribution-isolated image
+        id: build-galasa-distribution-isolated
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-distribution-isolated:test
+          push: true
+          tags: ${{ steps.metadata-galasa-distribution-isolated.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-distribution-isolated.outputs.labels }}
           build-args: |
             --tarPath
             isolated/full/target/isolated/isolated.tar
@@ -235,7 +249,6 @@ jobs:
         working-directory: ./isolated/full
         run: |
           mvn -f ${{github.workspace}}/isolated/full/pomZip.xml deploy \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.release.repo=file:${{github.workspace}}/isolated/full/repo \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -246,13 +259,21 @@ jobs:
           --batch-mode --errors --fail-at-end \
           --settings ${{ github.workspace }}/isolated/settings.xml
 
-      - name: Build Docker image for Isolated zip
+      - name: Extract metadata for galasa-isolated-zip image
+        id: metadata-galasa-isolated-zip
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated-zip
+
+      - name: Build galasa-isolated-zip image
+        id: build-galasa-isolated-zip
         uses: docker/build-push-action@v5
         with:
           context: ./isolated/full
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolatedzip
-          load: true
-          tags: galasa-isolated-zip:test
+          push: true
+          tags: ${{ steps.metadata-galasa-isolated-zip.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-isolated-zip.outputs.labels }}
           build-args: |
             baseVersion=latest
             dockerRepository=ghcr.io
@@ -309,7 +330,6 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pom.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -325,7 +345,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pom2.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -339,7 +358,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pom3.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -353,7 +371,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pom4.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -367,7 +384,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pom5.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -381,7 +397,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pom6.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -395,7 +410,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pomJavaDoc.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -412,7 +426,6 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pomDocs.xml process-sources \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -441,7 +454,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pomGalasactl.xml validate \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
           -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
@@ -456,23 +468,39 @@ jobs:
         run : |
           cp -vr resources/* target/isolated/
 
-      - name: Build Docker image for MVP development maven registry
+      - name: Extract metadata for galasa-mvp image
+        id: metadata-galasa-mvp
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp
+  
+      - name: Build galasa-mvp image
+        id: build-galasa-mvp
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-mvp:test
+          push: true
+          tags: ${{ steps.metadata-galasa-mvp.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-mvp.outputs.labels }}
           build-args: |
             directory=isolated/mvp
 
-      - name: Build Docker image for MVP tar file
+      - name: Extract metadata for galasa-distribution-mvp image
+        id: metadata-galasa-distribution-mvp
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-distribution-mvp
+
+      - name: Build galasa-distribution-mvp image
+        id: build-galasa-distribution-mvp
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-distribution-mvp:test
+          push: true
+          tags: ${{ steps.metadata-galasa-distribution-mvp.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-distribution-mvp.outputs.labels }}
           build-args: |
             --tarPath
             isolated/mvp/target/isolated/isolated.tar
@@ -482,7 +510,6 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           mvn -f ${{github.workspace}}/isolated/mvp/pomZip.xml deploy \
-          -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.release.repo=file:${{github.workspace}}/isolated/mvp/repo \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -493,13 +520,21 @@ jobs:
           --batch-mode --errors --fail-at-end \
           --settings ${{ github.workspace }}/isolated/settings.xml
 
-      - name: Build Docker image for MVP zip
+      - name: Extract metadata for galasa-mvp-zip image
+        id: metadata-galasa-mvp-zip
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp-zip
+  
+      - name: Build galasa-mvp-zip image
+        id: build-galasa-mvp-zip
         uses: docker/build-push-action@v5
         with:
           context: ./isolated/mvp
           file: ${{github.workspace}}/isolated/dockerfiles/dockerfile.isolatedzip
-          load: true
-          tags: galasa-mvp-zip:test
+          push: true
+          tags: ${{ steps.metadata-galasa-mvp-zip.outputs.tags }}
+          labels: ${{ steps.metadata-galasa-mvp-zip.outputs.labels }}
           build-args: |
             baseVersion=latest
             dockerRepository=ghcr.io
