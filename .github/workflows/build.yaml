@@ -65,6 +65,11 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/var/root/ ghcr.io/galasa-dev/galasabld-amd64:main template --releaseMetadata var/root/framework/release.yaml --releaseMetadata /var/root/extensions/release.yaml --releaseMetadata /var/root/managers/release.yaml --releaseMetadata /var/root/obr/release.yaml --template /var/root/isolated/full/pom.template --output /var/root/isolated/full/pom.xml --isolated
       
+      - name: Make directory to place build logs in
+        working-directory: ./isolated/full
+        run: |
+          mkdir isolated-build-logs
+          
       - name: Build Isolated pom.xml with maven
         working-directory: ./isolated/full
         env:
@@ -364,6 +369,11 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/var/root/ ghcr.io/galasa-dev/galasabld-amd64:main template --releaseMetadata var/root/framework/release.yaml --releaseMetadata /var/root/extensions/release.yaml --releaseMetadata /var/root/managers/release.yaml --releaseMetadata /var/root/obr/release.yaml --template /var/root/isolated/mvp/pom.template --output /var/root/isolated/mvp/pom.xml --mvp
       
+      - name: Make directory to place build logs in
+        working-directory: ./isolated/mvp
+        run: |
+          mkdir mvp-build-logs
+
       - name: Build MVP pom.xml with maven
         working-directory: ./isolated/mvp
         env:
