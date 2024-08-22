@@ -61,6 +61,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pom.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -72,11 +73,12 @@ jobs:
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
           -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-pom.log
 
       - name: Build Isolated pom2.xml with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pom2.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -86,11 +88,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-pom2.log
 
       - name: Build Isolated pom3.xml with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pom3.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -100,11 +103,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-pom3.log
 
       - name: Build Isolated pom4.xml with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pom4.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -114,11 +118,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-pom4.log
 
       - name: Build Isolated pom5.xml with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pom5.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -128,11 +133,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-pom5.log
 
       - name: Build Isolated pom6.xml with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pom6.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -142,11 +148,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-pom6.log
 
       - name: Build Isolated Javadoc with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pomJavaDoc.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -156,7 +163,7 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-javadoc.log
 
       - name: Build Isolated Docs with maven
         working-directory: ./isolated/full
@@ -164,6 +171,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pomDocs.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -175,7 +183,7 @@ jobs:
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
           -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-docs.log
 
       - name: Download galasactl binaries
         working-directory: ./isolated/full
@@ -193,6 +201,7 @@ jobs:
       - name: Build galasactl directory with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pomGalasactl.xml validate -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -202,7 +211,7 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-galasactl.log
 
       - name: Copy text files into Isolated
         working-directory: ./isolated/full
@@ -234,6 +243,7 @@ jobs:
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/full/pomZip.xml deploy -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -244,7 +254,15 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-zip.log
+
+      - name: Upload Isolated Maven build logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: isolated-maven-build-logs
+          path: isolated-build-logs
+          retention-days: 7
 
       - name: Build Docker image for Isolated zip
         uses: docker/build-push-action@v5
@@ -308,6 +326,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pom.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -319,11 +338,12 @@ jobs:
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
           -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-pom.log
 
       - name: Build MVP pom2.xml with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pom2.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -333,11 +353,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-pom2.log
 
       - name: Build MVP pom3.xml with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pom3.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -347,11 +368,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-pom3.log
 
       - name: Build MVP pom4.xml with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pom4.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -361,11 +383,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-pom4.log
 
       - name: Build MVP pom5.xml with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pom5.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -375,11 +398,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-pom5.log
 
       - name: Build MVP pom6.xml with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pom6.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -389,11 +413,12 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-pom6.log
 
       - name: Build MVP Javadoc with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pomJavaDoc.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -403,7 +428,7 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-javadoc.log
 
       - name: Build MVP Docs with maven
         working-directory: ./isolated/mvp
@@ -411,6 +436,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pomDocs.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -422,7 +448,7 @@ jobs:
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
           -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-docs.log
 
       - name: Download galasactl binaries
         working-directory: ./isolated/mvp
@@ -440,6 +466,7 @@ jobs:
       - name: Build galasactl directory with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pomGalasactl.xml validate -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -449,7 +476,7 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-galasactl.log
 
       - name: Copy text files into MVP
         working-directory: ./isolated/mvp
@@ -481,6 +508,7 @@ jobs:
       - name: Build MVP zip with maven
         working-directory: ./isolated/mvp
         run: |
+          set -o pipefail
           mvn -f ${{ github.workspace }}/isolated/mvp/pomZip.xml deploy -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
@@ -491,7 +519,15 @@ jobs:
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml
+          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-zip.log
+
+      - name: Upload MVP Maven build logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mvp-maven-build-logs
+          path: mvp-build-logs
+          retention-days: 7
 
       - name: Build Docker image for MVP zip
         uses: docker/build-push-action@v5

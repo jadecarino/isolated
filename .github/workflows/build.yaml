@@ -280,11 +280,12 @@ jobs:
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-zip.log
 
       - name: Upload Isolated Maven build logs
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: isolated-maven-build-logs
           path: isolated-build-logs
+          retention-days: 7
 
       - name: Extract metadata for galasa-isolated-zip image
         id: metadata-galasa-isolated-zip
@@ -578,11 +579,12 @@ jobs:
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-zip.log
 
       - name: Upload MVP Maven build logs
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: mvp-maven-build-logs
           path: mvp-build-logs
+          retention-days: 7
 
       - name: Extract metadata for galasa-mvp-zip image
         id: metadata-galasa-mvp-zip
