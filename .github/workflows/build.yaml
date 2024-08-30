@@ -1,3 +1,8 @@
+#
+# Copyright contributors to the Galasa project
+#
+# SPDX-License-Identifier: EPL-2.0
+#
 name: Main build
 
 on:
@@ -9,7 +14,6 @@ env:
   REGISTRY: ghcr.io
   NAMESPACE: galasa-dev
   BRANCH: ${{ github.ref_name }}
-  ARGO_APP_BRANCH: gh # TODO: remove this parameter and just use env.BRANCH once we update development.galasa.dev/main with these workflows.
 
 jobs:
   log-github-ref:
@@ -77,11 +81,11 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pom.xml process-sources -X \
+          mvn -f isolated/full/pom.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
@@ -93,11 +97,11 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pom2.xml process-sources -X \
+          mvn -f isolated/full/pom2.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -107,11 +111,11 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pom3.xml process-sources -X \
+          mvn -f isolated/full/pom3.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -121,11 +125,11 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pom4.xml process-sources -X \
+          mvn -f isolated/full/pom4.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -135,11 +139,11 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pom5.xml process-sources -X \
+          mvn -f isolated/full/pom5.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -149,11 +153,11 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pom6.xml process-sources -X \
+          mvn -f isolated/full/pom6.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -163,11 +167,11 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pomJavaDoc.xml process-sources -X \
+          mvn -f isolated/full/pomJavaDoc.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -180,11 +184,11 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pomDocs.xml process-sources -X \
+          mvn -f isolated/full/pomDocs.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
@@ -197,23 +201,23 @@ jobs:
         run: |
           mkdir bin && 
           cd bin && 
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-darwin-x86_64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-darwin-arm64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-linux-arm64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-linux-x86_64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-linux-s390x &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-windows-x86_64.exe &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-darwin-x86_64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-darwin-arm64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-linux-arm64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-linux-x86_64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-linux-s390x &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-windows-x86_64.exe &&
           cd ..
 
       - name: Build galasactl directory with maven
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pomGalasactl.xml validate -X \
+          mvn -f isolated/full/pomGalasactl.xml validate -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -273,12 +277,12 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/full/pomZip.xml deploy -X \
+          mvn -f isolated/full/pomZip.xml deploy -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.release.repo=file:${{ github.workspace }}/isolated/full/repo \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -315,13 +319,13 @@ jobs:
         env: 
             ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
         run: |
-            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app actions run ${{ env.ARGO_APP_BRANCH }}-maven-repos restart --kind Deployment --resource-name isolated-${{ env.ARGO_APP_BRANCH }} --server argocd.galasa.dev
+            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app actions run ${{ env.BRANCH }}-maven-repos restart --kind Deployment --resource-name isolated-${{ env.BRANCH }} --server argocd.galasa.dev
        
       - name: Wait for application health in ArgoCD
         env: 
             ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
         run: |
-            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app wait ${{ env.ARGO_APP_BRANCH }}-maven-repos --resource apps:Deployment:isolated-${{ env.ARGO_APP_BRANCH }} --health --server argocd.galasa.dev
+            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app wait ${{ env.BRANCH }}-maven-repos --resource apps:Deployment:isolated-${{ env.BRANCH }} --health --server argocd.galasa.dev
 
 
   build-mvp:
@@ -381,11 +385,11 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pom.xml process-sources -X \
+          mvn -f isolated/mvp/pom.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
@@ -397,11 +401,11 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pom2.xml process-sources -X \
+          mvn -f isolated/mvp/pom2.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -411,11 +415,11 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pom3.xml process-sources -X \
+          mvn -f isolated/mvp/pom3.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -425,11 +429,11 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pom4.xml process-sources -X \
+          mvn -f isolated/mvp/pom4.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -439,11 +443,11 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pom5.xml process-sources -X \
+          mvn -f isolated/mvp/pom5.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -453,11 +457,11 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pom6.xml process-sources -X \
+          mvn -f isolated/mvp/pom6.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -467,11 +471,11 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pomJavaDoc.xml process-sources -X \
+          mvn -f isolated/mvp/pomJavaDoc.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -484,11 +488,11 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pomDocs.xml process-sources -X \
+          mvn -f isolated/mvp/pomDocs.xml process-sources -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
@@ -501,23 +505,23 @@ jobs:
         run: |
           mkdir bin && 
           cd bin && 
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-darwin-x86_64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-darwin-arm64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-linux-arm64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-linux-x86_64 &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-linux-s390x &&
-          wget https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/binary/cli/galasactl-windows-x86_64.exe &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-darwin-x86_64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-darwin-arm64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-linux-arm64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-linux-x86_64 &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-linux-s390x &&
+          wget https://development.galasa.dev/${{ env.BRANCH }}/binary/cli/galasactl-windows-x86_64.exe &&
           cd ..
 
       - name: Build galasactl directory with maven
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pomGalasactl.xml validate -X \
+          mvn -f isolated/mvp/pomGalasactl.xml validate -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -577,12 +581,12 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f ${{ github.workspace }}/isolated/mvp/pomZip.xml deploy -X \
+          mvn -f isolated/mvp/pomZip.xml deploy -X \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.release.repo=file:${{ github.workspace }}/isolated/mvp/repo \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.ARGO_APP_BRANCH }}/maven-repo/javadoc \
+          -Dgalasa.runtime.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/obr \
+          -Dgalasa.simplatform.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/simplatform \
+          -Dgalasa.javadoc.repo=https://development.galasa.dev/${{ env.BRANCH }}/maven-repo/javadoc \
           -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
@@ -619,10 +623,10 @@ jobs:
         env: 
             ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
         run: |
-            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app actions run ${{ env.ARGO_APP_BRANCH }}-maven-repos restart --kind Deployment --resource-name mvp-${{ env.ARGO_APP_BRANCH }} --server argocd.galasa.dev
+            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app actions run ${{ env.BRANCH }}-maven-repos restart --kind Deployment --resource-name mvp-${{ env.BRANCH }} --server argocd.galasa.dev
        
       - name: Wait for application health in ArgoCD
         env: 
             ARGOCD_AUTH_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
         run: |
-            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app wait ${{ env.ARGO_APP_BRANCH }}-maven-repos --resource apps:Deployment:mvp-${{ env.ARGO_APP_BRANCH }} --health --server argocd.galasa.dev
+            docker run --env ARGOCD_AUTH_TOKEN=${{ env.ARGOCD_AUTH_TOKEN }} --rm -v ${{ github.workspace }}:/var/workspace ghcr.io/galasa-dev/argocdcli:main app wait ${{ env.BRANCH }}-maven-repos --resource apps:Deployment:mvp-${{ env.BRANCH }} --health --server argocd.galasa.dev
