@@ -72,7 +72,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f isolated/full/pom.xml process-sources -X \
+          mvn -f pom.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -89,7 +89,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pom2.xml process-sources -X \
+          mvn -f pom2.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -104,7 +104,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pom3.xml process-sources -X \
+          mvn -f pom3.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -119,7 +119,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pom4.xml process-sources -X \
+          mvn -f pom4.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -134,7 +134,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pom5.xml process-sources -X \
+          mvn -f pom5.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -149,7 +149,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pom6.xml process-sources -X \
+          mvn -f pom6.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -164,7 +164,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pomJavaDoc.xml process-sources -X \
+          mvn -f pomJavaDoc.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -182,7 +182,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f isolated/full/pomDocs.xml process-sources -X \
+          mvn -f pomDocs.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -212,7 +212,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pomGalasactl.xml validate -X \
+          mvn -f pomGalasactl.xml validate -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -254,7 +254,7 @@ jobs:
         working-directory: ./isolated/full
         run: |
           set -o pipefail
-          mvn -f isolated/full/pomZip.xml deploy -X \
+          mvn -f pomZip.xml deploy -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.release.repo=file:${{ github.workspace }}/isolated/full/repo \
@@ -342,7 +342,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pom.xml process-sources -X \
+          mvn -f pom.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -359,7 +359,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pom2.xml process-sources -X \
+          mvn -f pom2.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -374,7 +374,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pom3.xml process-sources -X \
+          mvn -f pom3.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -389,7 +389,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pom4.xml process-sources -X \
+          mvn -f pom4.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -404,7 +404,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pom5.xml process-sources -X \
+          mvn -f pom5.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -419,7 +419,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pom6.xml process-sources -X \
+          mvn -f pom6.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -434,7 +434,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pomJavaDoc.xml process-sources -X \
+          mvn -f pomJavaDoc.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -452,7 +452,7 @@ jobs:
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pomDocs.xml process-sources -X \
+          mvn -f pomDocs.xml process-sources -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -482,7 +482,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pomGalasactl.xml validate -X \
+          mvn -f pomGalasactl.xml validate -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
@@ -524,7 +524,7 @@ jobs:
         working-directory: ./isolated/mvp
         run: |
           set -o pipefail
-          mvn -f isolated/mvp/pomZip.xml deploy -X \
+          mvn -f pomZip.xml deploy -X \
           -Dgpg.skip=true \
           -Dgalasa.target.repo=file:target/isolated/maven \
           -Dgalasa.release.repo=file:${{ github.workspace }}/isolated/mvp/repo \
