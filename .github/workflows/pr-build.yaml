@@ -54,7 +54,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'semeru'
-          cache: maven
       
       - name:  Generate Isolated pom.xml
         run: |
@@ -324,7 +323,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'semeru'
-          cache: maven
       
       - name:  Generate MVP pom.xml
         run: |
