@@ -268,9 +268,8 @@ jobs:
           tags: ${{ steps.metadata-galasa-isolated-tar.outputs.tags }}
           labels: ${{ steps.metadata-galasa-isolated-tar.outputs.labels }}
           build-args: |
-            --tarPath
-            isolated/full/target/isolated/isolated.tar
             directory=isolated/full
+          outputs: type=tar,dest=isolated/full/target/isolated/isolated.tar
 
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
@@ -571,9 +570,8 @@ jobs:
           tags: ${{ steps.metadata-galasa-mvp-tar.outputs.tags }}
           labels: ${{ steps.metadata-galasa-mvp-tar.outputs.labels }}
           build-args: |
-            --tarPath
-            isolated/mvp/target/isolated/isolated.tar
             directory=isolated/mvp
+          outputs: type=tar,dest=isolated/mvp/target/isolated/isolated.tar
 
       - name: Build MVP zip with maven
         working-directory: ./isolated/mvp

@@ -245,9 +245,8 @@ jobs:
           load: true
           tags: galasa-isolated-tar:test
           build-args: |
-            --tarPath
-            isolated/full/target/isolated/isolated.tar
             directory=isolated/full
+          outputs: type=tar,dest=isolated/full/target/isolated/isolated.tar
 
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
@@ -514,9 +513,8 @@ jobs:
           load: true
           tags: galasa-mvp-tar:test
           build-args: |
-            --tarPath
-            isolated/mvp/target/isolated/isolated.tar
             directory=isolated/mvp
+          outputs: type=tar,dest=isolated/mvp/target/isolated/isolated.tar
 
       - name: Build MVP zip with maven
         working-directory: ./isolated/mvp
