@@ -20,29 +20,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Framework
+      - name: Checkout Galasa
         uses: actions/checkout@v4
         with:
-          repository: ${{ env.NAMESPACE }}/framework
-          path: framework
-
-      - name: Checkout Extensions
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.NAMESPACE }}/extensions
-          path: extensions
-      
-      - name: Checkout Managers
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.NAMESPACE }}/managers
-          path: managers
-
-      - name: Checkout OBR
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.NAMESPACE }}/obr
-          path: obr
+          repository: ${{ env.NAMESPACE }}/galasa
+          path: galasa
 
       - name: Checkout Isolated
         uses: actions/checkout@v4
@@ -57,7 +39,7 @@ jobs:
       
       - name:  Generate Isolated pom.xml
         run: |
-          docker run --rm -v ${{ github.workspace }}:/var/root/ ghcr.io/galasa-dev/galasabld-amd64:main template --releaseMetadata var/root/framework/release.yaml --releaseMetadata /var/root/extensions/release.yaml --releaseMetadata /var/root/managers/release.yaml --releaseMetadata /var/root/obr/release.yaml --template /var/root/isolated/full/pom.template --output /var/root/isolated/full/pom.xml --isolated
+          docker run --rm -v ${{ github.workspace }}:/var/root/ ghcr.io/galasa-dev/galasabld-amd64:main template --releaseMetadata var/root/galasa/modules/framework/release.yaml --releaseMetadata /var/root/galasa/modules/extensions/release.yaml --releaseMetadata /var/root/galasa/modules/managers/release.yaml --releaseMetadata /var/root/galasa/modules/obr/release.yaml --template /var/root/isolated/full/pom.template --output /var/root/isolated/full/pom.xml --isolated
       
       - name: Make directory to place build logs in
         working-directory: ./isolated/full
@@ -288,29 +270,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Framework
+      - name: Checkout Galasa
         uses: actions/checkout@v4
         with:
-          repository: ${{ env.NAMESPACE }}/framework
-          path: framework
-
-      - name: Checkout Extensions
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.NAMESPACE }}/extensions
-          path: extensions
-      
-      - name: Checkout Managers
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.NAMESPACE }}/managers
-          path: managers
-
-      - name: Checkout OBR
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.NAMESPACE }}/obr
-          path: obr
+          repository: ${{ env.NAMESPACE }}/galasa
+          path: galasa
 
       - name: Checkout Isolated
         uses: actions/checkout@v4
@@ -325,7 +289,7 @@ jobs:
       
       - name:  Generate MVP pom.xml
         run: |
-          docker run --rm -v ${{ github.workspace }}:/var/root/ ghcr.io/galasa-dev/galasabld-amd64:main template --releaseMetadata var/root/framework/release.yaml --releaseMetadata /var/root/extensions/release.yaml --releaseMetadata /var/root/managers/release.yaml --releaseMetadata /var/root/obr/release.yaml --template /var/root/isolated/mvp/pom.template --output /var/root/isolated/mvp/pom.xml --mvp
+          docker run --rm -v ${{ github.workspace }}:/var/root/ ghcr.io/galasa-dev/galasabld-amd64:main template --releaseMetadata var/root/galasa/modules/framework/release.yaml --releaseMetadata /var/root/galasa/modules/extensions/release.yaml --releaseMetadata /var/root/galasa/modules/managers/release.yaml --releaseMetadata /var/root/galasa/modules/obr/release.yaml --template /var/root/isolated/mvp/pom.template --output /var/root/isolated/mvp/pom.xml --mvp
       
       - name: Make directory to place build logs in
         working-directory: ./isolated/mvp
