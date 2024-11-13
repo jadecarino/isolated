@@ -8,7 +8,7 @@
 
 #-----------------------------------------------------------------------------------------                   
 #
-# Objectives: Build this repository code locally.
+# Objectives: List dependencies of this repository
 # 
 #-----------------------------------------------------------------------------------------                   
 
@@ -60,9 +60,7 @@ function usage {
 Lists all the dependencies in all the code in this repository.
 
 Options are:
--h | --help : Display this help text
---module The name of the module to start building from
---chain true/false/yes/no/y/n
+n/a
 EOF
 }
 
