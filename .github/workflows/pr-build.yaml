@@ -219,16 +219,20 @@ jobs:
           build-args: |
             directory=isolated/full
 
-      - name: Build Docker image for Isolated tar file
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-isolated-tar:test
-          build-args: |
-            directory=isolated/full
-          outputs: type=tar,dest=isolated/full/target/isolated/isolated.tar
+      # - name: Build Docker image for Isolated tar file
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
+      #     load: true
+      #     tags: galasa-isolated-tar:test
+      #     build-args: |
+      #       directory=isolated/full
+      #     outputs: type=tar,dest=isolated/full/target/isolated/isolated.tar
+
+      - name: Manually build isolated.tar (Isolated)
+        run: |
+          docker save -o ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-isolated:main
 
       - name: Upload isolated.tar (Isolated) for testing
         uses: actions/upload-artifact@v4
@@ -475,16 +479,20 @@ jobs:
           build-args: |
             directory=isolated/mvp
 
-      - name: Build Docker image for MVP tar file
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-mvp-tar:test
-          build-args: |
-            directory=isolated/mvp
-          outputs: type=tar,dest=isolated/mvp/target/isolated/isolated.tar
+      # - name: Build Docker image for MVP tar file
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
+      #     load: true
+      #     tags: galasa-mvp-tar:test
+      #     build-args: |
+      #       directory=isolated/mvp
+      #     outputs: type=tar,dest=isolated/mvp/target/isolated/isolated.tar
+
+      - name: Manually build isolated.tar (MVP)
+        run: |
+          docker save -o ${{ github.workspace }}/isolated/mvp/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-mvp:main
 
       - name: Upload isolated.tar (MVP) for testing
         uses: actions/upload-artifact@v4
