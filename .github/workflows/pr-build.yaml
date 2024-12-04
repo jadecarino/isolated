@@ -232,6 +232,7 @@ jobs:
 
       - name: Manually build isolated.tar (Isolated)
         run: |
+          docker pull ghcr.io/galasa-dev/galasa-mvp:main
           docker save -o ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-isolated:main
 
       - name: Upload isolated.tar (Isolated) for testing
@@ -492,6 +493,7 @@ jobs:
 
       - name: Manually build isolated.tar (MVP)
         run: |
+          docker pull ghcr.io/galasa-dev/galasa-mvp:main
           docker save -o ${{ github.workspace }}/isolated/mvp/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-mvp:main
 
       - name: Upload isolated.tar (MVP) for testing
