@@ -230,6 +230,12 @@ jobs:
             directory=isolated/full
           outputs: type=tar,dest=isolated/full/target/isolated/isolated.tar
 
+      - name: Upload isolated.tar (Isolated) for testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: isolated.tar
+          path: ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar
+
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
         run: |
@@ -479,6 +485,12 @@ jobs:
           build-args: |
             directory=isolated/mvp
           outputs: type=tar,dest=isolated/mvp/target/isolated/isolated.tar
+
+      - name: Upload isolated.tar (MVP) for testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: mvp.tar
+          path: ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar
 
       - name: Build MVP zip with maven
         working-directory: ./isolated/mvp
