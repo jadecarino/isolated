@@ -214,21 +214,10 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          push: true
-          tags: ghcr.io/galasa-dev/galasa-isolated:${{ github.event.number }}
+          load: true
+          tags: galasa-isolated:test
           build-args: |
             directory=isolated/full
-
-      - name: Build isolated.tar file (full isolated)
-        run: |
-          docker pull ghcr.io/galasa-dev/galasa-isolated:${{ github.event.number }}
-          docker save -o ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-isolated:${{ github.event.number }}
-
-      - name: Upload isolated.tar (full isolated) for inspection
-        uses: actions/upload-artifact@v4
-        with:
-          name: isolated.tar
-          path: ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar
 
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
@@ -464,21 +453,10 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          push: true
-          tags: ghcr.io/galasa-dev/galasa-mvp:${{ github.event.number }}
+          load: true
+          tags: galasa-mvp:test
           build-args: |
             directory=isolated/mvp
-
-      - name: Manually build isolated.tar (MVP)
-        run: |
-          docker pull ghcr.io/galasa-dev/galasa-mvp:${{ github.event.number }}
-          docker save -o ${{ github.workspace }}/isolated/mvp/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-mvp:${{ github.event.number }}
-
-      - name: Upload isolated.tar (MVP) for testing
-        uses: actions/upload-artifact@v4
-        with:
-          name: mvp.tar
-          path: ${{ github.workspace }}/isolated/mvp/target/isolated/isolated.tar
 
       - name: Build MVP zip with maven
         working-directory: ./isolated/mvp
