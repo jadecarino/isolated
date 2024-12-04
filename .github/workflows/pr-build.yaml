@@ -221,8 +221,8 @@ jobs:
 
       - name: Build isolated.tar file (full isolated)
         run: |
-          docker pull ghcr.io/galasa-dev/galasa-isolated:test
-          docker save -o ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-isolated:test
+          docker pull ghcr.io/galasa-dev/galasa-isolated:${{ github.event.number }}
+          docker save -o ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-isolated:${{ github.event.number }}
 
       - name: Upload isolated.tar (full isolated) for inspection
         uses: actions/upload-artifact@v4
@@ -471,8 +471,8 @@ jobs:
 
       - name: Manually build isolated.tar (MVP)
         run: |
-          docker pull ghcr.io/galasa-dev/galasa-mvp:test
-          docker save -o ${{ github.workspace }}/isolated/mvp/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-mvp:test
+          docker pull ghcr.io/galasa-dev/galasa-mvp:${{ github.event.number }}
+          docker save -o ${{ github.workspace }}/isolated/mvp/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-mvp:${{ github.event.number }}
 
       - name: Upload isolated.tar (MVP) for testing
         uses: actions/upload-artifact@v4
