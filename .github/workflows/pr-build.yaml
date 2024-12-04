@@ -214,8 +214,8 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: ghcr.io/galasa-dev/galasa-isolated:test
+          push: true
+          tags: ghcr.io/galasa-dev/galasa-isolated:${{ github.event.number }}
           build-args: |
             directory=isolated/full
 
@@ -464,8 +464,8 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: ghcr.io/galasa-dev/galasa-mvp:test
+          push: true
+          tags: ghcr.io/galasa-dev/galasa-mvp:${{ github.event.number }}
           build-args: |
             directory=isolated/mvp
 
