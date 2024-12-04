@@ -219,17 +219,6 @@ jobs:
           build-args: |
             directory=isolated/full
 
-      - name: Build Docker image for Isolated tar file
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-isolated-tar:test
-          build-args: |
-            directory=isolated/full
-          outputs: type=tar,dest=isolated/full/target/isolated/isolated.tar
-
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
         run: |
@@ -468,17 +457,6 @@ jobs:
           tags: galasa-mvp:test
           build-args: |
             directory=isolated/mvp
-
-      - name: Build Docker image for MVP tar file
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          load: true
-          tags: galasa-mvp-tar:test
-          build-args: |
-            directory=isolated/mvp
-          outputs: type=tar,dest=isolated/mvp/target/isolated/isolated.tar
 
       - name: Build MVP zip with maven
         working-directory: ./isolated/mvp

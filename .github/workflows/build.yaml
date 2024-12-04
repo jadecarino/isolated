@@ -234,24 +234,10 @@ jobs:
           build-args: |
             directory=isolated/full
 
-      - name: Extract metadata for galasa-isolated-tar image
-        id: metadata-galasa-isolated-tar
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-isolated-tar
-
-      - name: Build Docker image for Isolated tar file
-        id: build-galasa-isolated-tar
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          push: true
-          tags: ${{ steps.metadata-galasa-isolated-tar.outputs.tags }}
-          labels: ${{ steps.metadata-galasa-isolated-tar.outputs.labels }}
-          build-args: |
-            directory=isolated/full
-          outputs: type=tar,dest=isolated/full/target/isolated/isolated.tar
+      - name: Manually build isolated.tar (full isolated)
+        run: |
+          docker pull ghcr.io/galasa-dev/galasa-isolated:main
+          docker save -o ${{ github.workspace }}/isolated/full/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-isolated:main
 
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
@@ -518,24 +504,10 @@ jobs:
           build-args: |
             directory=isolated/mvp
 
-      - name: Extract metadata for galasa-mvp-tar image
-        id: metadata-galasa-mvp-tar
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/galasa-mvp-tar
-
-      - name: Build Docker image for MVP tar file
-        id: build-galasa-mvp-tar
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ github.workspace }}/isolated/dockerfiles/dockerfile.isolated
-          push: true
-          tags: ${{ steps.metadata-galasa-mvp-tar.outputs.tags }}
-          labels: ${{ steps.metadata-galasa-mvp-tar.outputs.labels }}
-          build-args: |
-            directory=isolated/mvp
-          outputs: type=tar,dest=isolated/mvp/target/isolated/isolated.tar
+      - name: Manually build isolated.tar (MVP)
+        run: |
+          docker pull ghcr.io/galasa-dev/galasa-mvp:main
+          docker save -o ${{ github.workspace }}/isolated/mvp/target/isolated/isolated.tar ghcr.io/galasa-dev/galasa-mvp:main
 
       - name: Build MVP zip with maven
         working-directory: ./isolated/mvp
