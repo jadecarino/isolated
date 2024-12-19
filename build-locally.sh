@@ -281,14 +281,16 @@ function build_pom_xml {
 
     export DIRECTORY=$1
     export DISTRIBUTION=$2
+    export POM_FILE=$3
+    export TARGET_DIR=$4
 
     cd ${DIRECTORY}
 
-    h2 "Building the pom.xml for ${DISTRIBUTION}"
+    h2 "Building the ${POM_FILE} for ${DISTRIBUTION}"
 
-    cmd="mvn -f pom.xml process-sources -X \
+    cmd="mvn -f ${POM_FILE} process-sources -X \
     -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated/maven \
+    -Dgalasa.target.repo=file:${TARGET_DIR} \
     -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
     -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
     -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
@@ -304,256 +306,11 @@ function build_pom_xml {
 
     rc=$?
     if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pom.xml. Log file is ${log_file}"
+        error "Failed to build ${POM_FILE}. Log file is ${log_file}"
         exit 1
     fi
-    success "pom.xml built ok - log is at ${log_file}"
-
-}
-
-#------------------------------------------------------------------------------------
-function build_pom2_xml {
-
-    export DIRECTORY=$1
-    export DISTRIBUTION=$2
-
-    cd ${DIRECTORY}
-
-    h2 "Building the pom2.xml for ${DISTRIBUTION}"
-
-    cmd="mvn -f pom2.xml process-sources -X \
-    -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated/maven \
-    -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
-    -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
-    -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
-    -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-    -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
-    -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
-    --batch-mode --errors --fail-at-end \
-    --settings ${BASEDIR}/settings.xml"
-
-    echo "Command is $cmd" >> ${log_file}
-    $cmd 2>&1 >> ${log_file}
-
-    rc=$?
-    if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pom2.xml. Log file is ${log_file}"
-        exit 1
-    fi
-    success "pom2.xml built ok - log is at ${log_file}"
-
-}
-
-#------------------------------------------------------------------------------------
-function build_pom3_xml {
-
-    export DIRECTORY=$1
-    export DISTRIBUTION=$2
-
-    cd ${DIRECTORY}
-
-    h2 "Building the pom3.xml for ${DISTRIBUTION}"
-
-    cmd="mvn -f pom3.xml process-sources -X \
-    -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated/maven \
-    -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
-    -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
-    -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
-    -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-    -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
-    -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
-    --batch-mode --errors --fail-at-end \
-    --settings ${BASEDIR}/settings.xml"
-
-    echo "Command is $cmd" >> ${log_file}
-    $cmd 2>&1 >> ${log_file}
-
-    rc=$?
-    if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pom3.xml. Log file is ${log_file}"
-        exit 1
-    fi
-    success "pom3.xml built ok - log is at ${log_file}"
+    success "${POM_FILE} built ok - log is at ${log_file}"
     
-}
-
-#------------------------------------------------------------------------------------
-function build_pom4_xml {
-
-    export DIRECTORY=$1
-    export DISTRIBUTION=$2
-
-    cd ${DIRECTORY}
-
-    h2 "Building the pom4.xml for ${DISTRIBUTION}"
-
-    cmd="mvn -f pom4.xml process-sources -X \
-    -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated/maven \
-    -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
-    -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
-    -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
-    -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-    -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
-    -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
-    --batch-mode --errors --fail-at-end \
-    --settings ${BASEDIR}/settings.xml"
-
-    echo "Command is $cmd" >> ${log_file}
-    $cmd 2>&1 >> ${log_file}
-
-    rc=$?
-    if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pom4.xml. Log file is ${log_file}"
-        exit 1
-    fi
-    success "pom4.xml built ok - log is at ${log_file}"
-    
-}
-
-#------------------------------------------------------------------------------------
-function build_pom5_xml {
-
-    export DIRECTORY=$1
-    export DISTRIBUTION=$2
-
-    cd ${DIRECTORY}
-
-    h2 "Building the pom5.xml for ${DISTRIBUTION}"
-
-    cmd="mvn -f pom5.xml process-sources -X \
-    -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated/maven \
-    -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
-    -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
-    -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
-    -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-    -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
-    -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
-    --batch-mode --errors --fail-at-end \
-    --settings ${BASEDIR}/settings.xml"
-
-    echo "Command is $cmd" >> ${log_file}
-    $cmd 2>&1 >> ${log_file}
-
-    rc=$?
-    if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pom5.xml. Log file is ${log_file}"
-        exit 1
-    fi
-    success "pom5.xml built ok - log is at ${log_file}"
-    
-}
-
-#------------------------------------------------------------------------------------
-function build_pom6_xml {
-
-    export DIRECTORY=$1
-    export DISTRIBUTION=$2
-
-    cd ${DIRECTORY}
-
-    h2 "Building the pom6.xml for ${DISTRIBUTION}"
-
-    cmd="mvn -f pom6.xml process-sources -X \
-    -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated/maven \
-    -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
-    -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
-    -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
-    -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-    -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
-    -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
-    --batch-mode --errors --fail-at-end \
-    --settings ${BASEDIR}/settings.xml"
-
-    echo "Command is $cmd" >> ${log_file}
-    $cmd 2>&1 >> ${log_file}
-
-    rc=$?
-    if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pom6.xml. Log file is ${log_file}"
-        exit 1
-    fi
-    success "pom6.xml built ok - log is at ${log_file}"
-    
-}
-
-#------------------------------------------------------------------------------------
-function build_pom_javadoc_xml {
-
-    export DIRECTORY=$1
-    export DISTRIBUTION=$2
-
-    cd ${DIRECTORY}
-
-    h2 "Building the pomJavaDoc.xml for ${DISTRIBUTION}"
-
-    cmd="mvn -f pomJavaDoc.xml process-sources -X \
-    -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated \
-    -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
-    -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
-    -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
-    -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-    -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
-    -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
-    --batch-mode --errors --fail-at-end \
-    --settings ${BASEDIR}/settings.xml"
-
-    echo "Command is $cmd" >> ${log_file}
-    $cmd 2>&1 >> ${log_file}
-
-    rc=$?
-    if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pomJavadoc.xml. Log file is ${log_file}"
-        exit 1
-    fi
-    success "pomJavadoc.xml built ok - log is at ${log_file}"
-
-}
-
-#------------------------------------------------------------------------------------
-function build_pom_docs_xml {
-
-    export DIRECTORY=$1
-    export DISTRIBUTION=$2
-
-    cd ${DIRECTORY}
-
-    h2 "Building the pomDocs.xml for ${DISTRIBUTION}"
-
-    cmd="mvn -f pomDocs.xml process-sources -X \
-    -Dgpg.skip=true \
-    -Dgalasa.target.repo=file:target/isolated \
-    -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
-    -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
-    -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa.dev \
-    -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-    -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
-    -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
-    --batch-mode --errors --fail-at-end \
-    --settings ${BASEDIR}/settings.xml"
-
-    echo "Command is $cmd" >> ${log_file}
-    $cmd 2>&1 >> ${log_file}
-
-    rc=$?
-    if [[ "${rc}" != "0" ]]; then
-        error "Failed to build pomDocs.xml. Log file is ${log_file}"
-        exit 1
-    fi
-    success "pomDocs.xml built ok - log is at ${log_file}"
-
 }
 
 #------------------------------------------------------------------------------------
@@ -697,33 +454,33 @@ rm -rf ${MVP_DIR}/bin
 # with information from several release.yaml files.
 get_galasabld_binary_location
 
-generate_pom_xml ${ISOLATED_DIR} "isolated"
-build_pom_xml ${ISOLATED_DIR} "isolated"
-build_pom2_xml ${ISOLATED_DIR} "isolated"
-build_pom3_xml ${ISOLATED_DIR} "isolated"
-build_pom4_xml ${ISOLATED_DIR} "isolated"
-build_pom5_xml ${ISOLATED_DIR} "isolated"
-build_pom6_xml ${ISOLATED_DIR} "isolated"
-build_pom_javadoc_xml ${ISOLATED_DIR} "isolated"
-build_pom_docs_xml ${ISOLATED_DIR} "isolated"
-build_pom_galasactl_xml ${ISOLATED_DIR} "isolated"
-copy_text_files ${ISOLATED_DIR} "isolated"
-build_zip ${ISOLATED_DIR} "isolated"
+generate_pom_xml ${ISOLATED_DIR} "Isolated"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pom.xml" "target/isolated/maven"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pom2.xml" "target/isolated/maven"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pom3.xml" "target/isolated/maven"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pom4.xml" "target/isolated/maven"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pom5.xml" "target/isolated/maven"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pom6.xml" "target/isolated/maven"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pomJavaDoc.xml" "target/isolated"
+build_pom_xml ${ISOLATED_DIR} "Isolated" "pomDocs.xml" "target/isolated"
+build_pom_galasactl_xml ${ISOLATED_DIR} "Isolated"
+copy_text_files ${ISOLATED_DIR} "Isolated"
+build_zip ${ISOLATED_DIR} "Isolated"
 
 success "Galasa Isolated distribution built successfully - the result can be found at ${ISOLATED_DIR}/target/isolated."
 
-generate_pom_xml ${MVP_DIR} "mvp"
-build_pom_xml ${MVP_DIR} "mvp"
-build_pom2_xml ${MVP_DIR} "mvp"
-build_pom3_xml ${MVP_DIR} "mvp"
-build_pom4_xml ${MVP_DIR} "mvp"
-build_pom5_xml ${MVP_DIR} "mvp"
-build_pom6_xml ${MVP_DIR} "mvp"
-build_pom_javadoc_xml ${MVP_DIR} "mvp"
-build_pom_docs_xml ${MVP_DIR} "mvp"
-build_pom_galasactl_xml ${MVP_DIR} "mvp"
-copy_text_files ${MVP_DIR} "mvp"
-build_zip ${MVP_DIR} "mvp"
+generate_pom_xml ${MVP_DIR} "MVP"
+build_pom_xml ${MVP_DIR} "MVP" "pom.xml" "target/isolated/maven"
+build_pom_xml ${MVP_DIR} "MVP" "pom2.xml" "target/isolated/maven"
+build_pom_xml ${MVP_DIR} "MVP" "pom3.xml" "target/isolated/maven"
+build_pom_xml ${MVP_DIR} "MVP" "pom4.xml" "target/isolated/maven"
+build_pom_xml ${MVP_DIR} "MVP" "pom5.xml" "target/isolated/maven"
+build_pom_xml ${MVP_DIR} "MVP" "pom6.xml" "target/isolated/maven"
+build_pom_xml ${MVP_DIR} "MVP" "pomJavaDoc.xml" "target/isolated"
+build_pom_xml ${MVP_DIR} "MVP" "pomDocs.xml" "target/isolated"
+build_pom_galasactl_xml ${MVP_DIR} "MVP"
+copy_text_files ${MVP_DIR} "MVP"
+build_zip ${MVP_DIR} "MVP"
 
 success "Galasa MVP distribution built successfully - the result can be found at ${MVP_DIR}/target/isolated."
 
