@@ -134,6 +134,56 @@ function update_all_pom_version_tags {
     success "$source_file updated OK."
 }
 
+function update_pom_platform_version_tag {
+    source_file=$1
+    h1 "Updating the version in $source_file "
+
+    temp_dir=$2
+
+    set -o pipefail
+
+    temp_file="$temp_dir/temp-pom.xml"
+    rm -f $temp_file
+    touch $temp_file
+
+    info "Using temporary file $temp_file"
+    info "Updating file $source_file"
+
+    done="false"
+    platform_line_found="false"
+
+    while IFS="" read -r line; do
+        if [[ "$done" == "false" ]]; then
+            if [[ $line =~ "<artifactId>dev.galasa.platform</artifactId>" ]]; then
+                info "platform line found. $line"
+                platform_line_found="true"
+            elif [[ $line =~ "<version>" ]] && [[ $platform_line_found == true ]]; then
+                info "platform version line found. $line"
+                transformed_line=$(echo -n "$line" | sed "s/<version>.*<\/version>/<version>$component_version<\/version>/")
+                rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to substitute $source_file file."; exit 1; fi
+                info "changing that to $transformed_line"
+                line=$transformed_line
+
+                info "No more version substitutions needed."
+                done="true"
+            fi
+        fi
+
+        # Write the line to the temporary file
+        echo "$line" >> "$temp_file"
+    done < "$source_file"
+
+
+
+
+    # cat $source_file | sed "0,/<version>.*<\/version>$/<version>$component_version<\/version>/}" > $temp_file
+    # rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to set version into $source_file file."; exit 1; fi
+    cp $temp_file ${source_file}
+    rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to overwrite new version of $source_file file."; exit 1; fi
+
+    success "$source_file updated OK."
+}
+
 function update_pom_first_version_tag {
     source_file=$1
     h1 "Updating the version in $source_file "
@@ -178,6 +228,50 @@ function update_pom_first_version_tag {
     success "$source_file updated OK."
 }
 
+function update_simbank_version_in_script {
+    source_file=$1
+    h1 "Updating the version in $source_file "
+
+    temp_dir=$2
+
+    set -o pipefail
+
+    temp_file="$temp_dir/temp-script.sh"
+    rm -f $temp_file
+    touch $temp_file
+
+    info "Using temporary file $temp_file"
+    info "Updating file $source_file"
+
+    done="false"
+
+    while IFS="" read -r line ; do
+        
+        if [[ "$done" == "false" ]]; then
+            if [[ $line =~ "SIMBANK_VERSION" ]]; then
+                info "simbank version line found. $line"
+                transformed_line=$(echo -n "$line" | sed "s/SIMBANK_VERSION=\".*\"/SIMBANK_VERSION=\"$component_version\"/")
+                rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to substitute $source_file file."; exit 1; fi
+                info "changing that to $transformed_line"
+                line=$transformed_line
+
+                info "No more version substitutions needed."
+                done="true"
+            fi
+        fi
+        echo "$line" >> $temp_file
+    done < $source_file
+
+
+
+    # cat $source_file | sed "0,/<version>.*<\/version>$/<version>$component_version<\/version>/}" > $temp_file
+    # rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to set version into $source_file file."; exit 1; fi
+    cp $temp_file ${source_file}
+    rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to overwrite new version of $source_file file."; exit 1; fi
+
+    success "$source_file updated OK."
+}
+
 temp_dir=$BASEDIR/temp/versions
 rm -fr $temp_dir
 mkdir -p $temp_dir
@@ -192,15 +286,31 @@ mkdir -p $temp_dir
 #     g. mvp/pomZip.xml
 #     h. mvp/pomGalasactl.xml
 
+update_pom_first_version_tag $BASEDIR/full/pom2.xml $temp_dir
+update_pom_platform_version_tag $BASEDIR/full/pom2.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/full/pom3.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/full/pom4.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/full/pom5.xml $temp_dir
+update_pom_platform_version_tag $BASEDIR/full/pom5.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/full/pom6.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/full/pomDocs.xml $temp_dir
 update_all_pom_version_tags $BASEDIR/full/pomJavaDoc.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/full/pomZip.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/full/pomGalasactl.xml $temp_dir
+update_simbank_version_in_script $BASEDIR/full/resources/run-simplatform.sh $temp_dir
 
+update_pom_first_version_tag $BASEDIR/mvp/pom2.xml $temp_dir
+update_pom_platform_version_tag $BASEDIR/mvp/pom2.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/mvp/pom3.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/mvp/pom4.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/mvp/pom5.xml $temp_dir
+update_pom_platform_version_tag $BASEDIR/mvp/pom5.xml $temp_dir
+update_pom_first_version_tag $BASEDIR/mvp/pom6.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/mvp/pomDocs.xml $temp_dir
 update_all_pom_version_tags $BASEDIR/mvp/pomJavaDoc.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/mvp/pomZip.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/mvp/pomGalasactl.xml $temp_dir
+update_simbank_version_in_script $BASEDIR/mvp/resources/run-simplatform.sh $temp_dir
 
 
 
