@@ -124,10 +124,6 @@ function update_all_pom_version_tags {
         echo "$line" >> $temp_file
     done < $source_file
 
-
-
-    # cat $source_file | sed "0,/<version>.*<\/version>$/<version>$component_version<\/version>/}" > $temp_file
-    # rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to set version into $source_file file."; exit 1; fi
     cp $temp_file ${source_file}
     rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to overwrite new version of $source_file file."; exit 1; fi
 
@@ -173,11 +169,6 @@ function update_pom_platform_version_tag {
         echo "$line" >> "$temp_file"
     done < "$source_file"
 
-
-
-
-    # cat $source_file | sed "0,/<version>.*<\/version>$/<version>$component_version<\/version>/}" > $temp_file
-    # rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to set version into $source_file file."; exit 1; fi
     cp $temp_file ${source_file}
     rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to overwrite new version of $source_file file."; exit 1; fi
 
@@ -218,10 +209,6 @@ function update_pom_first_version_tag {
         echo "$line" >> $temp_file
     done < $source_file
 
-
-
-    # cat $source_file | sed "0,/<version>.*<\/version>$/<version>$component_version<\/version>/}" > $temp_file
-    # rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to set version into $source_file file."; exit 1; fi
     cp $temp_file ${source_file}
     rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to overwrite new version of $source_file file."; exit 1; fi
 
@@ -262,10 +249,6 @@ function update_simbank_version_in_script {
         echo "$line" >> $temp_file
     done < $source_file
 
-
-
-    # cat $source_file | sed "0,/<version>.*<\/version>$/<version>$component_version<\/version>/}" > $temp_file
-    # rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to set version into $source_file file."; exit 1; fi
     cp $temp_file ${source_file}
     rc=$?; if [[ "${rc}" != "0" ]]; then error "Failed to overwrite new version of $source_file file."; exit 1; fi
 
@@ -277,14 +260,26 @@ rm -fr $temp_dir
 mkdir -p $temp_dir
 
 #   These files need to be bumped...
-#     a. full/pomDocs.xml - only the first version tag needs replacing.
-#     b. full/pomJavaDoc.xml - all version tags need replacing.
-#     c. full/pomZip.xml - only the first version tag needs replacing.
-#     d. full/pomGalasactl.xml
-#     e. mvp/pomDocs.xml
-#     f. mvp/pomJavaDoc.xml
-#     g. mvp/pomZip.xml
-#     h. mvp/pomGalasactl.xml
+#     a. full/pom2.xml - the first version tag and the version of the platform needs replacing.
+#     b. full/pom3.xml - only the first version tag needs replacing.
+#     c. full/pom4.xml - only the first version tag needs replacing.
+#     d. full/pom5.xml - the first version tag and the version of the platform needs replacing.
+#     e. full/pom6.xml - only the first version tag needs replacing.
+#     f. full/pomDocs.xml - only the first version tag needs replacing.
+#     g. full/pomJavaDoc.xml - all version tags need replacing.
+#     h. full/pomZip.xml - only the first version tag needs replacing.
+#     i. full/pomGalasactl.xml
+#     j. full/resources/run-simplatform.sh - the SIMBANK_VERSION needs replacing.
+#     k. mvp/pom2.xml - the first version tag and the version of the platform needs replacing.
+#     l. mvp/pom3.xml - only the first version tag needs replacing.
+#     m. mvp/pom4.xml - only the first version tag needs replacing.
+#     n. mvp/pom5.xml - the first version tag and the version of the platform needs replacing.
+#     o. mvp/pom6.xml - only the first version tag needs replacing.
+#     p. mvp/pomDocs.xml
+#     q. mvp/pomJavaDoc.xml
+#     r. mvp/pomZip.xml
+#     s. mvp/pomGalasactl.xml
+#     t. mvp/resources/run-simplatform.sh - the SIMBANK_VERSION needs replacing.
 
 update_pom_first_version_tag $BASEDIR/full/pom2.xml $temp_dir
 update_pom_platform_version_tag $BASEDIR/full/pom2.xml $temp_dir
