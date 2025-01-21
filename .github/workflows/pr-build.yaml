@@ -169,6 +169,8 @@ jobs:
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-javadoc.log
 
       - name: Build Isolated Docs with maven
+        # Skip this step for forks as there will be no access to secrets to authenticate to GitHub Packages.
+        if: ${{ github.repository_owner == 'galasa-dev' }}
         working-directory: ./isolated/full
         env:
           GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
@@ -411,6 +413,8 @@ jobs:
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-javadoc.log
 
       - name: Build MVP Docs with maven
+        # Skip this step for forks as there will be no access to secrets to authenticate to GitHub Packages.
+        if: ${{ github.repository_owner == 'galasa-dev' }}
         working-directory: ./isolated/mvp
         env:
           GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
