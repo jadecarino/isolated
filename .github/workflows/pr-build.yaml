@@ -162,7 +162,7 @@ jobs:
         if: ${{ github.event.pull_request.head.repo.full_name  == github.repository }}
         working-directory: ./isolated/full
         env:
-          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
+          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ vars.READ_GITHUB_PACKAGES_USERNAME }}
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
@@ -405,7 +405,7 @@ jobs:
         if: ${{ github.event.pull_request.head.repo.full_name  == github.repository }}
         working-directory: ./isolated/mvp
         env:
-          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ secrets.READ_GITHUB_PACKAGES_USERNAME }}
+          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ vars.READ_GITHUB_PACKAGES_USERNAME }}
           GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
         run: |
           set -o pipefail
