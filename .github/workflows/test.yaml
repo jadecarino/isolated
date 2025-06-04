@@ -1,0 +1,506 @@
+#
+# Copyright contributors to the Galasa project
+#
+# SPDX-License-Identifier: EPL-2.0
+#
+name: Test Isolated and MVP
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *" # Daily at 06:00
+
+env:
+  REGISTRY: ghcr.io
+  NAMESPACE: ${{ github.repository_owner }}
+  BRANCH: ${{ github.ref_name }}
+
+jobs:
+  get-galasa-version:
+    name: Get Galasa Version
+    # Use the build.properties file in the galasa repo to source the galasa-version output variable.
+    # This variable can be referenced by other jobs in this flow using ${{ needs.get-galasa-version.outputs.galasa-version }}
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout 'galasa' repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.NAMESPACE }}/galasa
+          path: ${{ github.workspace }}/galasa
+          sparse-checkout: |
+            build.properties
+
+      - name: Get Galasa Version from build.properties file
+        id: get-galasa-version
+        run: |
+          cat ${{ github.workspace }}/galasa/build.properties | grep "=" >> $GITHUB_OUTPUT
+
+    outputs:
+      galasa-version: ${{ steps.get-galasa-version.outputs.GALASA_VERSION }}
+
+  test-isolated-zip:
+    runs-on: macos-latest
+
+    needs: [get-galasa-version]
+
+    env:
+      GALASA_HOME: ${{ github.workspace }}/.galasa
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'semeru'
+
+    #----------------------------------------------------------------------------------
+    # Download the Isolated zip of Galasa
+      - name: Make temp directory
+        run: |
+          mkdir ${{ github.workspace }}/temp
+
+      - name: Download the Isolated zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          wget https://development.galasa.dev/main/maven-repo/isolated/dev/galasa/galasa-isolated/${{ env.GALASA_VERSION }}/galasa-isolated-${{ env.GALASA_VERSION }}.zip
+
+      - name: Unzip the Isolated zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          mkdir isolated
+          unzip galasa-isolated-${{ env.GALASA_VERSION }}.zip -d isolated
+
+      - name: Clean up the downloaded Isolated zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          rm galasa-isolated-${{ env.GALASA_VERSION }}.zip
+
+    #----------------------------------------------------------------------------------
+    # Make galasactl binary in Isolated zip executable
+      - name: Make `galasactl` executable
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        run: |
+          chmod +x galasactl-darwin-arm64
+          xattr -dr com.apple.quarantine galasactl-darwin-arm64
+          mv galasactl-darwin-arm64 galasactl
+
+    #----------------------------------------------------------------------------------
+    # Set up Galasa environment
+      - name: Create Galasa home directory
+        run: |
+          mkdir ${{ env.GALASA_HOME }}
+
+      - name: Create cps.properties file
+        working-directory: ${{ env.GALASA_HOME }}
+        run: |
+          echo "${{ secrets.CICSTS_ZOS_CPS_PROPERTIES }}" >> cps.properties
+
+      - name: Create credentials.properties file
+        working-directory: ${{ env.GALASA_HOME }}
+        run: |
+          echo "${{ secrets.ZOS_CREDENTIALS }}" >> credentials.properties
+
+      - name: Initialise local Galasa environment to create remaining files and folders
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        run: |
+          ./galasactl local init --log -
+
+      - name: Create a RAS directory
+        run: |
+          mkdir ${{ env.GALASA_HOME }}/ras
+
+    #----------------------------------------------------------------------------------
+    # Run IVTs with the Isolated zip contents
+      - name: Run the CoreManagerIVT
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.core.manager.ivt/dev.galasa.core.manager.ivt.CoreManagerIVT \
+          --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/CoreManagerIVT.json \
+          --log -
+
+      - name: Run the ArtifactManagerIVT
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.artifact.manager.ivt/dev.galasa.artifact.manager.ivt.ArtifactManagerIVT \
+          --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/ArtifactManagerIVT.json \
+          --log -
+
+  test-simbank-isolated-zip:
+    runs-on: macos-latest
+
+    needs: [get-galasa-version]
+
+    env:
+      GALASA_HOME: ${{ github.workspace }}/.galasa
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'semeru'
+
+    #----------------------------------------------------------------------------------
+    # Download the Isolated zip of Galasa
+      - name: Make temp directory
+        run: |
+          mkdir ${{ github.workspace }}/temp
+
+      - name: Download the Isolated zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          wget https://development.galasa.dev/main/maven-repo/isolated/dev/galasa/galasa-isolated/${{ env.GALASA_VERSION }}/galasa-isolated-${{ env.GALASA_VERSION }}.zip
+
+      - name: Unzip the Isolated zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          mkdir isolated
+          unzip galasa-isolated-${{ env.GALASA_VERSION }}.zip -d isolated
+
+      - name: Clean up the downloaded Isolated zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          rm galasa-isolated-${{ env.GALASA_VERSION }}.zip
+
+    #----------------------------------------------------------------------------------
+    # Make galasactl binary in Isolated zip executable
+      - name: Make `galasactl` executable
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        run: |
+          chmod +x galasactl-darwin-arm64
+          xattr -dr com.apple.quarantine galasactl-darwin-arm64
+          mv galasactl-darwin-arm64 galasactl
+
+    #----------------------------------------------------------------------------------
+    # Set up Galasa environment
+      - name: Create Galasa home directory
+        run: |
+          mkdir ${{ env.GALASA_HOME }}
+
+      - name: Create cps.properties file
+        run: |
+          echo "${{ vars.SIMBANK_CPS_PROPERTIES }}" >> ${{ env.GALASA_HOME }}/cps.properties
+
+      - name: Create credentials.properties file
+        run: |
+          echo "${{ secrets.SIMBANK_CREDENTIALS }}" >> ${{ env.GALASA_HOME }}/credentials.properties
+
+      - name: Initialise local Galasa environment to create remaining files and folders
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        run: |
+          ./galasactl local init --log -
+
+      - name: Create a RAS directory
+        run: |
+          mkdir ${{ env.GALASA_HOME }}/ras
+
+    #----------------------------------------------------------------------------------
+    # Run the Simplatform application 
+      - name: Start the Simplatform application
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          echo "Starting SimBank application..."
+          java -jar ${{ github.workspace }}/temp/isolated/maven/dev/galasa/galasa-simplatform/${{ env.GALASA_VERSION }}/galasa-simplatform-${{ env.GALASA_VERSION }}.jar &
+
+    #----------------------------------------------------------------------------------
+    # Run IVTs with the Isolated zip contents
+      - name: Run the SimBankIVT
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.simbank.obr/${{ env.GALASA_VERSION }}/obr \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.SimBankIVT \
+          --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/SimBankIVT.json \
+          --log -
+
+      - name: Run the BasicAccountCreditTest
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.simbank.obr/${{ env.GALASA_VERSION }}/obr \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.BasicAccountCreditTest \
+          --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/BasicAccountCreditTest.json \
+          --log -
+
+      - name: Run the ProvisionedAccountCreditTests
+        working-directory: ${{ github.workspace }}/temp/isolated/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.simbank.obr/${{ env.GALASA_VERSION }}/obr \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.ProvisionedAccountCreditTests \
+          --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
+          --log -
+
+  test-mvp-zip:
+    runs-on: macos-latest
+
+    needs: [get-galasa-version]
+
+    env:
+      GALASA_HOME: ${{ github.workspace }}/.galasa
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'semeru'
+
+    #----------------------------------------------------------------------------------
+    # Download the MVP zip of Galasa
+      - name: Make temp directory
+        run: |
+          mkdir ${{ github.workspace }}/temp
+
+      - name: Download the MVP zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          wget https://development.galasa.dev/main/maven-repo/mvp/dev/galasa/galasa-isolated-mvp/${{ env.GALASA_VERSION }}/galasa-isolated-mvp-${{ env.GALASA_VERSION }}.zip
+
+      - name: Unzip the MVP zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          mkdir mvp
+          unzip galasa-isolated-mvp-${{ env.GALASA_VERSION }}.zip -d mvp
+
+      - name: Clean up the downloaded MVP zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          rm galasa-isolated-mvp-${{ env.GALASA_VERSION }}.zip
+
+    #----------------------------------------------------------------------------------
+    # Make galasactl binary in MVP zip executable
+      - name: Make `galasactl` executable
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        run: |
+          chmod +x galasactl-darwin-arm64
+          xattr -dr com.apple.quarantine galasactl-darwin-arm64
+          mv galasactl-darwin-arm64 galasactl
+
+    #----------------------------------------------------------------------------------
+    # Set up Galasa environment
+      - name: Initialise local Galasa environment to create remaining files and folders
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        run: |
+          ./galasactl local init --log -
+
+      - name: Create a RAS directory
+        run: |
+          mkdir ${{ env.GALASA_HOME }}/ras
+
+    #----------------------------------------------------------------------------------
+    # Run IVTs with the MVP zip contents
+      - name: Run the CoreManagerIVT
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.core.manager.ivt/dev.galasa.core.manager.ivt.CoreManagerIVT \
+          --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/CoreManagerIVT.json \
+          --log -
+
+      - name: Run the ArtifactManagerIVT
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.artifact.manager.ivt/dev.galasa.artifact.manager.ivt.ArtifactManagerIVT \
+          --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/ArtifactManagerIVT.json \
+          --log -
+
+  test-simbank-mvp-zip:
+    runs-on: macos-latest
+
+    needs: [get-galasa-version]
+
+    env:
+      GALASA_HOME: ${{ github.workspace }}/.galasa
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'semeru'
+
+    #----------------------------------------------------------------------------------
+    # Download the MVP zip of Galasa
+      - name: Make temp directory
+        run: |
+          mkdir ${{ github.workspace }}/temp
+
+      - name: Download the MVP zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          wget https://development.galasa.dev/main/maven-repo/mvp/dev/galasa/galasa-isolated-mvp/${{ env.GALASA_VERSION }}/galasa-isolated-mvp-${{ env.GALASA_VERSION }}.zip
+
+      - name: Unzip the MVP zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          mkdir mvp
+          unzip galasa-isolated-mvp-${{ env.GALASA_VERSION }}.zip -d mvp
+
+      - name: Clean up the downloaded MVP zip
+        working-directory: ${{ github.workspace }}/temp
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          rm galasa-isolated-mvp-${{ env.GALASA_VERSION }}.zip
+
+    #----------------------------------------------------------------------------------
+    # Make galasactl binary in MVP zip executable
+      - name: Make `galasactl` executable
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        run: |
+          chmod +x galasactl-darwin-arm64
+          xattr -dr com.apple.quarantine galasactl-darwin-arm64
+          mv galasactl-darwin-arm64 galasactl
+
+    #----------------------------------------------------------------------------------
+    # Set up Galasa environment
+      - name: Create Galasa home directory
+        run: |
+          mkdir ${{ env.GALASA_HOME }}
+
+      - name: Create cps.properties file
+        working-directory: ${{ env.GALASA_HOME }}
+        run: |
+          echo "${{ vars.SIMBANK_CPS_PROPERTIES }}" >> cps.properties
+
+      - name: Create credentials.properties file
+        working-directory: ${{ env.GALASA_HOME }}
+        run: |
+            echo "${{ secrets.SIMBANK_CREDENTIALS }}" >> credentials.properties
+
+      - name: Initialise local Galasa environment to create remaining files and folders
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        run: |
+          ./galasactl local init --log -
+
+      - name: Create a RAS directory
+        run: |
+          mkdir ${{ env.GALASA_HOME }}/ras
+
+    #----------------------------------------------------------------------------------
+    # Run the Simplatform application 
+      - name: Start the Simplatform application
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          echo "Starting SimBank application..."
+          java -jar ${{ github.workspace }}/temp/mvp/maven/dev/galasa/galasa-simplatform/${{ env.GALASA_VERSION }}/galasa-simplatform-${{ env.GALASA_VERSION }}.jar &
+
+    #----------------------------------------------------------------------------------
+    # Run IVTs with the MVP zip contents
+      - name: Run the SimBankIVT
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.simbank.obr/${{ env.GALASA_VERSION }}/obr \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.SimBankIVT \
+          --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/SimBankIVT.json \
+          --log -
+
+      - name: Run the BasicAccountCreditTest
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.simbank.obr/${{ env.GALASA_VERSION }}/obr \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.BasicAccountCreditTest \
+          --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/BasicAccountCreditTest.json \
+          --log -
+
+      - name: Run the ProvisionedAccountCreditTests
+        working-directory: ${{ github.workspace }}/temp/mvp/galasactl
+        env:
+          GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
+        run: |
+          ./galasactl runs submit local \
+          --obr mvn:dev.galasa/dev.galasa.simbank.obr/${{ env.GALASA_VERSION }}/obr \
+          --obr mvn:dev.galasa/dev.galasa.uber.obr/${{ env.GALASA_VERSION }}/obr \
+          --class dev.galasa.simbank.tests/dev.galasa.simbank.tests.ProvisionedAccountCreditTests \
+          --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
+          --reportjson ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
+          --log -
