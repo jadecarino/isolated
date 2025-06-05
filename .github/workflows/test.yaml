@@ -123,6 +123,7 @@ jobs:
     #----------------------------------------------------------------------------------
     # Run IVTs with the Isolated zip contents
       - name: Run the CoreManagerIVT
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/isolated/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -136,6 +137,7 @@ jobs:
           --log -
 
       - name: Run the ArtifactManagerIVT
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/isolated/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -160,6 +162,7 @@ jobs:
     #----------------------------------------------------------------------------------
     # Run IVTs with the Isolated zip contents
       - name: Run the SimBankIVT
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/isolated/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -174,6 +177,7 @@ jobs:
           --log -
 
       - name: Run the BasicAccountCreditTest
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/isolated/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -188,6 +192,7 @@ jobs:
           --log -
 
       - name: Run the ProvisionedAccountCreditTests
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/isolated/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -309,6 +314,7 @@ jobs:
     #----------------------------------------------------------------------------------
     # Run IVTs with the MVP zip contents
       - name: Run the CoreManagerIVT
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/mvp/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -322,6 +328,7 @@ jobs:
           --log -
 
       - name: Run the ArtifactManagerIVT
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/mvp/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -346,6 +353,7 @@ jobs:
     #----------------------------------------------------------------------------------
     # Run IVTs with the MVP zip contents
       - name: Run the SimBankIVT
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/mvp/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -360,6 +368,7 @@ jobs:
           --log -
 
       - name: Run the BasicAccountCreditTest
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/mvp/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
@@ -374,6 +383,7 @@ jobs:
           --log -
 
       - name: Run the ProvisionedAccountCreditTests
+        continue-on-error: true # We want all tests run one after another regardless of results.
         working-directory: ${{ github.workspace }}/temp/mvp/galasactl
         env:
           GALASA_VERSION: ${{ needs.get-galasa-version.outputs.galasa-version }}
