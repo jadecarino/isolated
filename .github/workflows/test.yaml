@@ -198,6 +198,31 @@ jobs:
           --reportjson ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
           --log -
 
+    #----------------------------------------------------------------------------------
+    # Combine test reports and report to Slack channel.
+      - name: Combine test reports
+        run: |
+          jq -s '{ tests: map(.tests[]) }' ${{ github.workspace }}/.galasa/ras/CoreManagerIVT.json \
+           ${{ github.workspace }}/.galasa/ras/ArtifactManagerIVT.json \
+           ${{ github.workspace }}/.galasa/ras/SimBankIVT.json \
+           ${{ github.workspace }}/.galasa/ras/BasicAccountCreditTest.json \
+           ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
+           > ${{ github.workspace }}/.galasa/ras/isolated-tests.json
+
+      - name: Report results into Slack channel
+        env: 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          docker run --rm \
+            --env SLACK_WEBHOOK=${{ env.SLACK_WEBHOOK }} \
+            -v ${{ github.workspace }}/.galasa:/galasa \
+            ghcr.io/${{ env.NAMESPACE }}/galasabld-ibm:main \
+            slackpost tests \
+            --path /galasa/ras/isolated-tests.json \
+            --name "Galasa Isolated" \
+            --desc "Tests run locally in Github Actions with just Isolated zip" \
+            --hook ${{ env.SLACK_WEBHOOK }}
+
   test-mvp-zip:
     runs-on: macos-latest
 
@@ -358,3 +383,28 @@ jobs:
           --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
           --log -
+
+    #----------------------------------------------------------------------------------
+    # Combine test reports and report to Slack channel.
+      - name: Combine test reports
+        run: |
+          jq -s '{ tests: map(.tests[]) }' ${{ github.workspace }}/.galasa/ras/CoreManagerIVT.json \
+           ${{ github.workspace }}/.galasa/ras/ArtifactManagerIVT.json \
+           ${{ github.workspace }}/.galasa/ras/SimBankIVT.json \
+           ${{ github.workspace }}/.galasa/ras/BasicAccountCreditTest.json \
+           ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
+           > ${{ github.workspace }}/.galasa/ras/mvp-tests.json
+
+      - name: Report results into Slack channel
+        env: 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          docker run --rm \
+            --env SLACK_WEBHOOK=${{ env.SLACK_WEBHOOK }} \
+            -v ${{ github.workspace }}/.galasa:/galasa \
+            ghcr.io/${{ env.NAMESPACE }}/galasabld-ibm:main \
+            slackpost tests \
+            --path /galasa/ras/mvp-tests.json \
+            --name "Galasa MVP" \
+            --desc "Tests run locally in Github Actions with just MVP zip" \
+            --hook ${{ env.SLACK_WEBHOOK }}
