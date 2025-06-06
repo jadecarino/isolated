@@ -134,6 +134,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/CoreManagerIVT.json \
+          --tags isolated \
           --log -
 
       - name: Run the ArtifactManagerIVT
@@ -148,6 +149,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/ArtifactManagerIVT.json \
+          --tags isolated \
           --log -
 
     #----------------------------------------------------------------------------------
@@ -174,6 +176,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/SimBankIVT.json \
+          --tags isolated \
           --log -
 
       - name: Run the BasicAccountCreditTest
@@ -189,6 +192,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/BasicAccountCreditTest.json \
+          --tags isolated \
           --log -
 
       - name: Run the ProvisionedAccountCreditTests
@@ -204,6 +208,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/isolated/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
+          --tags isolated \
           --log -
 
     #----------------------------------------------------------------------------------
@@ -217,19 +222,14 @@ jobs:
            ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
            > ${{ github.workspace }}/.galasa/ras/isolated-tests.json
 
-      - name: Report results into Slack channel
-        env: 
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        run: |
-          docker run --rm \
-            --env SLACK_WEBHOOK=${{ env.SLACK_WEBHOOK }} \
-            -v ${{ github.workspace }}/.galasa:/galasa \
-            ghcr.io/${{ env.NAMESPACE }}/galasabld-ibm:main \
-            slackpost tests \
-            --path /galasa/ras/isolated-tests.json \
-            --name "Galasa Isolated" \
-            --desc "Tests run locally in Github Actions with just Isolated zip" \
-            --hook ${{ env.SLACK_WEBHOOK }}
+      # The test report must be sent to Slack in the next job that uses the ubuntu-latest runner.
+      # We need to run a Docker image to communicate with the Slack webhook and the macos-latest
+      # runner does not have `docker` installed. Upload the report and download in the next job.
+      - name: Upload Isolated test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: isolated-tests.json
+          path: ${{ github.workspace }}/.galasa/isolated-tests.json
 
   test-mvp-zip:
     runs-on: macos-latest
@@ -325,6 +325,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/CoreManagerIVT.json \
+          --tags mvp \
           --log -
 
       - name: Run the ArtifactManagerIVT
@@ -339,6 +340,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/ArtifactManagerIVT.json \
+          --tags mvp \
           --log -
 
     #----------------------------------------------------------------------------------
@@ -365,6 +367,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/SimBankIVT.json \
+          --tags mvp \
           --log -
 
       - name: Run the BasicAccountCreditTest
@@ -380,6 +383,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/BasicAccountCreditTest.json \
+          --tags mvp \
           --log -
 
       - name: Run the ProvisionedAccountCreditTests
@@ -395,6 +399,7 @@ jobs:
           --localMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --remoteMaven file:///${{ github.workspace }}/temp/mvp/maven \
           --reportjson ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
+          --tags mvp \
           --log -
 
     #----------------------------------------------------------------------------------
@@ -408,16 +413,48 @@ jobs:
            ${{ github.workspace }}/.galasa/ras/ProvisionedAccountCreditTests.json \
            > ${{ github.workspace }}/.galasa/ras/mvp-tests.json
 
+      # The test report must be sent to Slack in the next job that uses the ubuntu-latest runner.
+      # We need to run a Docker image to communicate with the Slack webhook and the macos-latest
+      # runner does not have `docker` installed. Upload the report and download in the next job.
+      - name: Upload MVP test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mvp-tests.json
+          path: ${{ github.workspace }}/.galasa/mvp-tests.json
+
+  report-test-results:
+    name: Report test results into Slack
+    runs-on: ubuntu-latest
+
+    needs: [test-isolated-zip, test-mvp-zip]
+
+    steps:
+      - name: Make temp directory
+        run: |
+          mkdir ${{ github.workspace }}/temp
+
+      - name: Download Isolated Test Report
+        uses: actions/download-artifact@v4
+        with:
+          name: isolated-tests.json
+          path: ${{ github.workspace }}/temp
+
+      - name: Download MVP Test Report
+        uses: actions/download-artifact@v4
+        with:
+          name: mvp-tests.json
+          path: ${{ github.workspace }}/temp
+
       - name: Report results into Slack channel
         env: 
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
           docker run --rm \
             --env SLACK_WEBHOOK=${{ env.SLACK_WEBHOOK }} \
-            -v ${{ github.workspace }}/.galasa:/galasa \
+            -v ${{ github.workspace }}/temp:/galasa \
             ghcr.io/${{ env.NAMESPACE }}/galasabld-ibm:main \
             slackpost tests \
             --path /galasa/ras/mvp-tests.json \
-            --name "Galasa MVP" \
-            --desc "Tests run locally in Github Actions with just MVP zip" \
+            --name "Galasa Isolated/MVP" \
+            --desc "Tests run locally in Github Actions with the Isolated or MVP zip contents" \
             --hook ${{ env.SLACK_WEBHOOK }}
