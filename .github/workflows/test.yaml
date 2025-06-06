@@ -229,7 +229,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: isolated-tests.json
-          path: ${{ github.workspace }}/.galasa/isolated-tests.json
+          path: ${{ github.workspace }}/.galasa/ras/isolated-tests.json
 
   test-mvp-zip:
     runs-on: macos-latest
@@ -420,7 +420,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mvp-tests.json
-          path: ${{ github.workspace }}/.galasa/mvp-tests.json
+          path: ${{ github.workspace }}/.galasa/ras/mvp-tests.json
 
   report-test-results:
     name: Report test results into Slack
