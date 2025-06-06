@@ -439,6 +439,20 @@ jobs:
           name: isolated-tests.json
           path: ${{ github.workspace }}/temp
 
+      - name: Report results into Slack channel
+        env: 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          docker run --rm \
+            --env SLACK_WEBHOOK=${{ env.SLACK_WEBHOOK }} \
+            -v ${{ github.workspace }}/temp:/galasa \
+            ghcr.io/${{ env.NAMESPACE }}/galasabld-ibm:main \
+            slackpost tests \
+            --path /galasa/isolated-tests.json \
+            --name "Galasa Isolated" \
+            --desc "Tests run locally in Github Actions with the Isolated zip contents" \
+            --hook ${{ env.SLACK_WEBHOOK }}
+
       - name: Download MVP Test Report
         uses: actions/download-artifact@v4
         with:
@@ -454,7 +468,7 @@ jobs:
             -v ${{ github.workspace }}/temp:/galasa \
             ghcr.io/${{ env.NAMESPACE }}/galasabld-ibm:main \
             slackpost tests \
-            --path /galasa/ras/mvp-tests.json \
-            --name "Galasa Isolated/MVP" \
-            --desc "Tests run locally in Github Actions with the Isolated or MVP zip contents" \
+            --path /galasa/mvp-tests.json \
+            --name "Galasa MVP" \
+            --desc "Tests run locally in Github Actions with the MVP zip contents" \
             --hook ${{ env.SLACK_WEBHOOK }}
