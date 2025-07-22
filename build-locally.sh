@@ -306,7 +306,7 @@ function build_pom_xml {
     -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
     -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
     -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev-archives/galasa.dev \
+    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa \
     -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
     -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
     -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
@@ -346,7 +346,7 @@ function build_pom_galasactl_xml {
     -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
     -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
     -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev-archives/galasa.dev \
+    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa \
     -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
     -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
     -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
@@ -398,7 +398,7 @@ function build_zip {
     -Dgalasa.runtime.repo=${SOURCE_MAVEN_OBR} \
     -Dgalasa.simplatform.repo=${SOURCE_MAVEN_SIMPLATFORM} \
     -Dgalasa.javadoc.repo=${SOURCE_MAVEN_JAVADOC} \
-    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev-archives/galasa.dev \
+    -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev/galasa \
     -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
     -Dgithub.token.read.packages.username=${GITHUB_USERNAME} \
     -Dgithub.token.read.packages.password=${GITHUB_TOKEN} \
