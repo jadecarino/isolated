@@ -265,21 +265,19 @@ mkdir -p $temp_dir
 #     c. full/pom4.xml - only the first version tag needs replacing.
 #     d. full/pom5.xml - the first version tag and the version of the platform needs replacing.
 #     e. full/pom6.xml - only the first version tag needs replacing.
-#     f. full/pomDocs.xml - only the first version tag needs replacing.
-#     g. full/pomJavaDoc.xml - all version tags need replacing.
-#     h. full/pomZip.xml - only the first version tag needs replacing.
-#     i. full/pomGalasactl.xml
-#     j. full/resources/run-simplatform.sh - the SIMBANK_VERSION needs replacing.
-#     k. mvp/pom2.xml - the first version tag and the version of the platform needs replacing.
-#     l. mvp/pom3.xml - only the first version tag needs replacing.
-#     m. mvp/pom4.xml - only the first version tag needs replacing.
-#     n. mvp/pom5.xml - the first version tag and the version of the platform needs replacing.
-#     o. mvp/pom6.xml - only the first version tag needs replacing.
-#     p. mvp/pomDocs.xml
-#     q. mvp/pomJavaDoc.xml
-#     r. mvp/pomZip.xml
-#     s. mvp/pomGalasactl.xml
-#     t. mvp/resources/run-simplatform.sh - the SIMBANK_VERSION needs replacing.
+#     f. full/pomJavaDoc.xml - all version tags need replacing.
+#     g. full/pomZip.xml - only the first version tag needs replacing.
+#     h. full/pomGalasactl.xml
+#     i. full/resources/run-simplatform.sh - the SIMBANK_VERSION needs replacing.
+#     j. mvp/pom2.xml - the first version tag and the version of the platform needs replacing.
+#     k. mvp/pom3.xml - only the first version tag needs replacing.
+#     l. mvp/pom4.xml - only the first version tag needs replacing.
+#     m. mvp/pom5.xml - the first version tag and the version of the platform needs replacing.
+#     n. mvp/pom6.xml - only the first version tag needs replacing.
+#     o. mvp/pomJavaDoc.xml
+#     p. mvp/pomZip.xml
+#     q. mvp/pomGalasactl.xml
+#     r. mvp/resources/run-simplatform.sh - the SIMBANK_VERSION needs replacing.
 
 update_pom_first_version_tag $BASEDIR/full/pom2.xml $temp_dir
 update_pom_platform_version_tag $BASEDIR/full/pom2.xml $temp_dir
@@ -288,7 +286,6 @@ update_pom_first_version_tag $BASEDIR/full/pom4.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/full/pom5.xml $temp_dir
 update_pom_platform_version_tag $BASEDIR/full/pom5.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/full/pom6.xml $temp_dir
-update_pom_first_version_tag $BASEDIR/full/pomDocs.xml $temp_dir
 update_all_pom_version_tags $BASEDIR/full/pomJavaDoc.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/full/pomZip.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/full/pomGalasactl.xml $temp_dir
@@ -301,7 +298,6 @@ update_pom_first_version_tag $BASEDIR/mvp/pom4.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/mvp/pom5.xml $temp_dir
 update_pom_platform_version_tag $BASEDIR/mvp/pom5.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/mvp/pom6.xml $temp_dir
-update_pom_first_version_tag $BASEDIR/mvp/pomDocs.xml $temp_dir
 update_all_pom_version_tags $BASEDIR/mvp/pomJavaDoc.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/mvp/pomZip.xml $temp_dir
 update_pom_first_version_tag $BASEDIR/mvp/pomGalasactl.xml $temp_dir

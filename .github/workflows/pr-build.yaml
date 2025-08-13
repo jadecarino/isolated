@@ -157,28 +157,6 @@ jobs:
           --batch-mode --errors --fail-at-end \
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-javadoc.log
 
-      - name: Build Isolated Docs with maven
-        # Skip this step for forks as there will be no access to secrets to authenticate to GitHub Packages.
-        if: ${{ github.event.pull_request.head.repo.full_name  == github.repository }}
-        working-directory: ./isolated/full
-        env:
-          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ vars.READ_GITHUB_PACKAGES_USERNAME }}
-          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
-        run: |
-          set -o pipefail
-          mvn -f pomDocs.xml process-sources -X \
-          -Dgpg.skip=true \
-          -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
-          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev-archives/galasa.dev \
-          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
-          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
-          --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-docs.log
-
       - name: Download galasactl binaries
         working-directory: ./isolated/full
         run: |
@@ -399,28 +377,6 @@ jobs:
           -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
           --batch-mode --errors --fail-at-end \
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-javadoc.log
-
-      - name: Build MVP Docs with maven
-        # Skip this step for forks as there will be no access to secrets to authenticate to GitHub Packages.
-        if: ${{ github.event.pull_request.head.repo.full_name  == github.repository }}
-        working-directory: ./isolated/mvp
-        env:
-          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ vars.READ_GITHUB_PACKAGES_USERNAME }}
-          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
-        run: |
-          set -o pipefail
-          mvn -f pomDocs.xml process-sources -X \
-          -Dgpg.skip=true \
-          -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
-          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev-archives/galasa.dev \
-          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
-          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
-          --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-docs.log
 
       - name: Download galasactl binaries
         working-directory: ./isolated/mvp

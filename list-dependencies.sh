@@ -79,7 +79,6 @@ process_maven_file pom3.xml
 process_maven_file pom4.xml
 process_maven_file pom5.xml
 process_maven_file pom6.xml
-process_maven_file pomDocs.xml
 process_maven_file pomGalasactl.xml
 process_maven_file pomJavaDoc.xml
 process_maven_file pomZip.xml
