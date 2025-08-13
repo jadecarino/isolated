@@ -25,7 +25,7 @@ Pre-requisites
 ----------------
 
 - Java 11 or above to run Galasa tests. Currently Java 21 or above is not supported.
-- Docker - If you want to load and run the Docker images provided in this zip, you will need Docker installed.
+- Docker daemon, an implementation of the Docker commands (e.g., from Rancher, Docker, or Podman) - If you want to load and run the Docker images provided in this zip, you will need Docker installed.
 
 
 Running the website on your local machine
