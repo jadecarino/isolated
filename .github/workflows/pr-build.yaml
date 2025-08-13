@@ -14,9 +14,32 @@ env:
   NAMESPACE: ${{ github.repository_owner }}
   
 jobs:
+  find-last-successful-build:
+    name: Find last successful Galasa build to download galasa-docs-site from
+    runs-on: ubuntu-latest
+
+    outputs: 
+      workflow_id: ${{ steps.find-last-successful-build.outputs.workflow_id }}
+
+    steps:
+      - name: Find last successful Galasa build
+        id: find-last-successful-build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: https://github.com/galasa-dev/galasa
+        run: |
+          echo "workflow_id=$(gh run list \
+            --repo ${{ env.REPO }} \
+            --workflow 'Main Build Orchestrator' \
+            --branch main \
+            --status success \
+            --limit 1 \
+            --json databaseId | jq '.[0].databaseId')" >> $GITHUB_OUTPUT
+
   build-isolated:
     name: Build Isolated
     runs-on: ubuntu-latest
+    needs: find-last-successful-build
 
     steps:
       - name: Checkout Galasa
@@ -200,6 +223,14 @@ jobs:
           build-args: |
             directory=isolated/full
 
+      - name: Download galasa-docs-site HTML from Galasa builds
+        uses: actions/download-artifact@v4
+        with:
+          name: galasa-docs-site
+          path: ${{ github.workspace }}/isolated/full/target/isolated/galasa-docs-site
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.find-last-successful-build.outputs.workflow_id }}
+
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
         run: |
@@ -238,6 +269,7 @@ jobs:
   build-mvp:
     name: Build MVP
     runs-on: ubuntu-latest
+    needs: find-last-successful-build
 
     steps:
       - name: Checkout Galasa
@@ -444,6 +476,14 @@ jobs:
           name: mvp-maven-build-logs
           path: mvp-build-logs
           retention-days: 7
+
+      - name: Download galasa-docs-site HTML from Galasa builds
+        uses: actions/download-artifact@v4
+        with:
+          name: galasa-docs-site
+          path: ${{ github.workspace }}/isolated/mvp/target/isolated/galasa-docs-site
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.find-last-successful-build.outputs.workflow_id }}
 
       - name: Build Docker image for MVP zip
         uses: docker/build-push-action@v5
