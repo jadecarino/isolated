@@ -227,6 +227,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: galasa-docs-site
+          repository: galasa-dev/galasa
           path: ${{ github.workspace }}/isolated/full/target/isolated/galasa-docs-site
           github-token: ${{ github.token }}
           run-id: ${{ needs.find-last-successful-build.outputs.workflow_id }}
@@ -481,6 +482,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: galasa-docs-site
+          repository: galasa-dev/galasa
           path: ${{ github.workspace }}/isolated/mvp/target/isolated/galasa-docs-site
           github-token: ${{ github.token }}
           run-id: ${{ needs.find-last-successful-build.outputs.workflow_id }}
