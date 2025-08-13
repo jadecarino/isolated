@@ -14,9 +14,32 @@ env:
   NAMESPACE: ${{ github.repository_owner }}
   
 jobs:
+  find-last-successful-build:
+    name: Find last successful Galasa build to download galasa-docs-site from
+    runs-on: ubuntu-latest
+
+    outputs: 
+      workflow_id: ${{ steps.find-last-successful-build.outputs.workflow_id }}
+
+    steps:
+      - name: Find last successful Galasa build
+        id: find-last-successful-build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: https://github.com/galasa-dev/galasa
+        run: |
+          echo "workflow_id=$(gh run list \
+            --repo ${{ env.REPO }} \
+            --workflow 'Main Build Orchestrator' \
+            --branch main \
+            --status success \
+            --limit 1 \
+            --json databaseId | jq '.[0].databaseId')" >> $GITHUB_OUTPUT
+
   build-isolated:
     name: Build Isolated
     runs-on: ubuntu-latest
+    needs: find-last-successful-build
 
     steps:
       - name: Checkout Galasa
@@ -157,28 +180,6 @@ jobs:
           --batch-mode --errors --fail-at-end \
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-javadoc.log
 
-      - name: Build Isolated Docs with maven
-        # Skip this step for forks as there will be no access to secrets to authenticate to GitHub Packages.
-        if: ${{ github.event.pull_request.head.repo.full_name  == github.repository }}
-        working-directory: ./isolated/full
-        env:
-          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ vars.READ_GITHUB_PACKAGES_USERNAME }}
-          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
-        run: |
-          set -o pipefail
-          mvn -f pomDocs.xml process-sources -X \
-          -Dgpg.skip=true \
-          -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
-          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev-archives/galasa.dev \
-          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
-          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
-          --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee isolated-build-logs/build-isolated-docs.log
-
       - name: Download galasactl binaries
         working-directory: ./isolated/full
         run: |
@@ -222,6 +223,15 @@ jobs:
           build-args: |
             directory=isolated/full
 
+      - name: Download galasa-docs-site HTML from Galasa builds
+        uses: actions/download-artifact@v4
+        with:
+          name: galasa-docs-site
+          repository: galasa-dev/galasa
+          path: ${{ github.workspace }}/isolated/full/target/isolated/galasa-docs-site
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.find-last-successful-build.outputs.workflow_id }}
+
       - name: Build Isolated zip with maven
         working-directory: ./isolated/full
         run: |
@@ -260,6 +270,7 @@ jobs:
   build-mvp:
     name: Build MVP
     runs-on: ubuntu-latest
+    needs: find-last-successful-build
 
     steps:
       - name: Checkout Galasa
@@ -400,28 +411,6 @@ jobs:
           --batch-mode --errors --fail-at-end \
           --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-javadoc.log
 
-      - name: Build MVP Docs with maven
-        # Skip this step for forks as there will be no access to secrets to authenticate to GitHub Packages.
-        if: ${{ github.event.pull_request.head.repo.full_name  == github.repository }}
-        working-directory: ./isolated/mvp
-        env:
-          GITHUB_TOKEN_READ_PACKAGES_USERNAME: ${{ vars.READ_GITHUB_PACKAGES_USERNAME }}
-          GITHUB_TOKEN_READ_PACKAGES_PASSWORD: ${{ secrets.READ_GITHUB_PACKAGES_TOKEN }}
-        run: |
-          set -o pipefail
-          mvn -f pomDocs.xml process-sources -X \
-          -Dgpg.skip=true \
-          -Dgalasa.target.repo=file:target/isolated/maven \
-          -Dgalasa.runtime.repo=https://development.galasa.dev/main/maven-repo/obr \
-          -Dgalasa.simplatform.repo=https://development.galasa.dev/main/maven-repo/simplatform \
-          -Dgalasa.javadoc.repo=https://development.galasa.dev/main/maven-repo/javadoc \
-          -Dgalasa.docs.repo=https://maven.pkg.github.com/galasa-dev-archives/galasa.dev \
-          -Dgalasa.central.repo=https://repo.maven.apache.org/maven2/ \
-          -Dgithub.token.read.packages.username=${{ env.GITHUB_TOKEN_READ_PACKAGES_USERNAME }} \
-          -Dgithub.token.read.packages.password=${{ env.GITHUB_TOKEN_READ_PACKAGES_PASSWORD }} \
-          --batch-mode --errors --fail-at-end \
-          --settings ${{ github.workspace }}/isolated/settings.xml 2>&1 | tee mvp-build-logs/build-mvp-docs.log
-
       - name: Download galasactl binaries
         working-directory: ./isolated/mvp
         run: |
@@ -488,6 +477,15 @@ jobs:
           name: mvp-maven-build-logs
           path: mvp-build-logs
           retention-days: 7
+
+      - name: Download galasa-docs-site HTML from Galasa builds
+        uses: actions/download-artifact@v4
+        with:
+          name: galasa-docs-site
+          repository: galasa-dev/galasa
+          path: ${{ github.workspace }}/isolated/mvp/target/isolated/galasa-docs-site
+          github-token: ${{ github.token }}
+          run-id: ${{ needs.find-last-successful-build.outputs.workflow_id }}
 
       - name: Build Docker image for MVP zip
         uses: docker/build-push-action@v5

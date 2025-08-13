@@ -474,7 +474,6 @@ build_pom_xml ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION} "pom4.xml" "target/isolat
 build_pom_xml ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION} "pom5.xml" "target/isolated/maven"
 build_pom_xml ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION} "pom6.xml" "target/isolated/maven"
 build_pom_xml ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION} "pomJavaDoc.xml" "target/isolated"
-build_pom_xml ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION} "pomDocs.xml" "target/isolated"
 build_pom_galasactl_xml ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION}
 copy_text_files ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION}
 build_zip ${ISOLATED_DIR} ${ISOLATED_DISTRIBUTION}
@@ -489,7 +488,6 @@ build_pom_xml ${MVP_DIR} ${MVP_DISTRIBUTION} "pom4.xml" "target/isolated/maven"
 build_pom_xml ${MVP_DIR} ${MVP_DISTRIBUTION} "pom5.xml" "target/isolated/maven"
 build_pom_xml ${MVP_DIR} ${MVP_DISTRIBUTION} "pom6.xml" "target/isolated/maven"
 build_pom_xml ${MVP_DIR} ${MVP_DISTRIBUTION} "pomJavaDoc.xml" "target/isolated"
-build_pom_xml ${MVP_DIR} ${MVP_DISTRIBUTION} "pomDocs.xml" "target/isolated"
 build_pom_galasactl_xml ${MVP_DIR} ${MVP_DISTRIBUTION}
 copy_text_files ${MVP_DIR} ${MVP_DISTRIBUTION}
 build_zip ${MVP_DIR} ${MVP_DISTRIBUTION}
